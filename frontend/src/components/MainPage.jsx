@@ -14,7 +14,8 @@ class MainPage extends React.Component {
         return <div>
             <NavMenu user={user} />
             <Container text style={{
-                marginTop: "7em"
+                marginTop: "5em",
+                paddingBottom: "2em",
             }}>
                 <MainRoutes
                     setLoggedInUser={setLoggedInUser}
