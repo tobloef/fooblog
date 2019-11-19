@@ -14,7 +14,9 @@ class LoginForm extends React.Component {
             onChangePassword,
         } = this.props;
 
-        return <Form onSubmit={onSubmit}>
+        console.log("LoginForm", errorMessage);
+
+        return <>
             {
                 errorMessage != null && <Message
                     error
@@ -22,32 +24,34 @@ class LoginForm extends React.Component {
                     content={errorMessage}
                 />
             }
-            <Form.Field>
-                <label>Username</label>
-                <Input
-                    placeholder={"Username"}
-                    value={username}
-                    onChange={(e, {value}) => onChangeUsername(value)}
-                    autoComplete={"username"}
+            <Form onSubmit={onSubmit}>
+                <Form.Field>
+                    <label>Username</label>
+                    <Input
+                        placeholder={"Username"}
+                        value={username}
+                        onChange={(e, {value}) => onChangeUsername(value)}
+                        autoComplete={"username"}
+                    />
+                </Form.Field>
+                <Form.Field>
+                    <label>Password</label>
+                    <Input
+                        value={password}
+                        onChange={(e, {value}) => onChangePassword(value)}
+                        placeholder={"Password"}
+                        type={"password"}
+                        autoComplete={"current-password"}
+                    />
+                </Form.Field>
+                <Button
+                    type={"submit"}
+                    primary
+                    content={"Log in"}
+                    loading={submitting}
                 />
-            </Form.Field>
-            <Form.Field>
-                <label>Password</label>
-                <Input
-                    value={password}
-                    onChange={(e, {value}) => onChangePassword(value)}
-                    placeholder={"Password"}
-                    type={"password"}
-                    autoComplete={"current-password"}
-                />
-            </Form.Field>
-            <Button
-                type={"submit"}
-                primary
-                content={"Log in"}
-                loading={submitting}
-            />
-        </Form>
+            </Form>
+        </>
     }
 }
 

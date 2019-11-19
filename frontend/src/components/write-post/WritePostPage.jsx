@@ -16,19 +16,19 @@ class WritePostPage extends React.Component {
             <Header
                 content={"Write new blog post"}
             />
+            {
+                errorMessage != null && <Message
+                    error
+                    header={"Post submission failed"}
+                    content={errorMessage}
+                />
+            }
             <Form onSubmit={() => {
                 if (submitting) {
                     return;
                 }
                 onSubmit(title, content);
             }}>
-                {
-                    errorMessage != null && <Message
-                        error
-                        header={"Post submission failed"}
-                        content={errorMessage}
-                    />
-                }
                 <Form.Field>
                     <label>Title</label>
                     <Input
