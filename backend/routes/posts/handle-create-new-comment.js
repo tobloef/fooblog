@@ -1,33 +1,34 @@
-import {insertPost} from "../../database/posts.js";
-import crypto from "crypto";
+import {getPostByUrlSlug} from "../../database/posts.js";
+import {insertComment} from "../../database/comments.js";
 
-const handleCreateNewPost = async (req, res) => {
+const handleCreateNewComment = async (req, res) => {
     const {
-        title,
         content
     } = req.body;
     const {
         user
     } = req.locals;
+    const {
+        urlSlug
+    } = req.params;
 
     if (user == null) {
         return res.status(401).send("User not logged in.");
     }
-    if (title == null) {
-        return res.status(400).send("Title is missing.");
-    }
     if (content == null) {
         return res.status(400).send("Content is missing.");
     }
-    const urlSlug = titleToUrlSlug(title);
-    const post = {
-        title,
+    const post = await getPostByUrlSlug(urlSlug);
+    if (post == null) {
+        return res.status(400).send("Invalid post to add comment to.");
+    }
+    const comment = {
         content,
-        urlSlug,
         authorId: user.id,
         datePosted: new Date(),
+        postId: post.id,
     };
-    await insertPost(post);
+    await insertComment(comment);
     res.status(200).send();
 };
 
@@ -40,4 +41,4 @@ function titleToUrlSlug(title) {
     return urlSlug;
 }
 
-export default handleCreateNewPost;
+export default handleCreateNewComment;

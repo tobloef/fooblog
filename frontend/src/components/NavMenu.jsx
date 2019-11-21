@@ -62,7 +62,7 @@ class NavMenu extends React.Component {
                 <Menu.Item
                     as={Link}
                     to={"/"}
-                    content={"Home"}
+                    content={"All posts"}
                 />
                 <Menu.Menu
                     position={"right"}

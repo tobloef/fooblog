@@ -20,7 +20,7 @@ class MainRoutes extends React.Component {
         return <Switch>
             <Route exact path={"/"} component={FrontPage} />
             <Route exact path={"/@:username"} component={UserPageContainer} />
-            <Route exact path={"/@:username/:postSlug"} component={PostPageContainer} />
+            <Route exact path={"/@:username/:urlSlug"} component={PostPageContainer} />
             <Route exact path={"/write-post"} component={WritePostPageContainer} />
             <Route exact path={"/register"} component={(props) => {
                 return <RegisterPageContainer {...props} user={user} />

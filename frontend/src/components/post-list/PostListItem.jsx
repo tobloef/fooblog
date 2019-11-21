@@ -9,14 +9,14 @@ import {Link} from "react-router-dom";
 class PostListItem extends React.Component {
     render() {
         const {
-            postSlug,
+            urlSlug,
             title,
             content,
             datePosted,
             author,
         } = this.props;
 
-        const postLinkPath = `/@${author.username}/${postSlug}`;
+        const postLinkPath = `/@${author.username}/${urlSlug}`;
 
         return <Segment
             as={Link}
@@ -39,7 +39,7 @@ class PostListItem extends React.Component {
 }
 
 PostListItem.propTypes = {
-    postSlug: PropTypes.string.isRequired,
+    urlSlug: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
     datePosted: PropTypes.any.isRequired,

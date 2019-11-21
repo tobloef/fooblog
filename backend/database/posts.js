@@ -2,8 +2,14 @@ import {db} from "./database.js";
 
 export async function getPostByUrlSlug(urlSlug) {
     const query = `
-        SELECT *
+        SELECT
+            posts.*,
+            json_build_object(
+              'id',  users.id,
+              'username', users.username
+            ) as user
         FROM posts
+        JOIN users ON users.id = posts."authorId"
         WHERE "urlSlug" = $(urlSlug)
     `;
     const params = {
@@ -12,18 +18,25 @@ export async function getPostByUrlSlug(urlSlug) {
     return await db.any(query, params);
 }
 
-export async function getPosts(username, oldestDate, limit = 10) {
+export async function getPosts(username, minDate, limit = 10) {
     let query = `
-        SELECT *
-        FROM users
+        SELECT 
+            posts.*,
+            json_build_object(
+              'id',  users.id,
+              'username', users.username
+            ) as user
+        FROM posts
+        JOIN users ON users."id" = posts."authorId"
         WHERE
-            "datePosted" > $(oldestDate)
-            ${username ? `AND "username" = $(username)` : ""}
-        ORDER BY "datePosted"
+            posts."datePosted" > $(minDate)
+            ${username ? `AND users."username" = $(username)` : ""}
+        ORDER BY posts."datePosted"
         LIMIT $(limit)
     `;
     const params = {
-        oldestDate,
+        username,
+        minDate,
         limit
     };
     return await db.any(query, params);
@@ -35,12 +48,14 @@ export async function insertPost(post) {
             "urlSlug",
             "title",
             "content",
-            "authorId"
+            "authorId",
+            "datePosted"
         ) VALUES (
             $(urlSlug),
             $(title),
             $(content),
-            $(authorId)
+            $(authorId),
+            $(datePosted)
         )
     `;
     const params = {
@@ -48,6 +63,7 @@ export async function insertPost(post) {
         title: post.title,
         content: post.content,
         authorId: post.authorId,
+        datePosted: post.datePosted,
     };
     return await db.any(query, params);
 }

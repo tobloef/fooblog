@@ -6,74 +6,99 @@ export function setAuthToken(newAuthToken) {
     authToken = newAuthToken;
 }
 
-export async function fetchPosts(username, oldestDateLoaded, postsToLoad) {
-    // TODO
-    await wait(1000 * 3);
-    return [
-        {
-            title: "This is a test title #1",
-            content: "Bla bla bla bla bla bla bla bla. ".repeat(100),
-            datePosted: new Date(),
-            postSlug: "this-is-a-test-title-1",
-            author: {
-                username: "tobloef"
-            },
+async function get(url, queryParams) {
+    if (queryParams != null) {
+        url += generateQueryString(queryParams);
+    }
+    const response = await fetch(url, {
+        method: "GET",
+        headers: {
         },
-        {
-            title: "This is a test title #2",
-            content: "Bla bla bla bla bla bla bla bla. ".repeat(100),
-            datePosted: new Date(),
-            postSlug: "this-is-a-test-title-2",
-            author: {
-                username: "tobloef"
-            },
-        },
-        {
-            title: "This is a test title #3",
-            content: "Bla bla bla bla bla bla bla bla. ".repeat(100),
-            datePosted: new Date(),
-            postSlug: "this-is-a-test-title-3",
-            author: {
-                username: "tobloef"
-            },
-        },
-    ]
+    });
+    return await response.json();
 }
 
-export async function fetchPost(postSlug) {
-    // TODO
-    await wait(1000 * 3);
-    return {
-        title: "This is a test title #1",
-        content: "Bla bla bla bla bla bla bla bla. ".repeat(100),
-        datePosted: new Date(),
-        postSlug: "this-is-a-test-title-1",
-        author: {
-            username: "tobloef"
+async function post(url, data, queryParams) {
+    if (queryParams != null) {
+        url += generateQueryString(queryParams);
+    }
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": authToken ? `Bearer ${authToken}` : null,
         },
-    };
+        body: JSON.stringify(data)
+    });
+    return await response.json();
+}
+
+function generateQueryString(query) {
+    const hasAnyValues = Object.entries(query).filter(([key, value]) => value != null).length > 0;
+    if (query == null || !hasAnyValues) {
+        return "";
+    }
+    return "?" + Object.entries(query)
+        .filter(([key, value]) => value != null)
+        .map(([key, value]) => {
+            // noinspection JSCheckFunctionSignatures
+            return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        })
+        .join("&");
+}
+
+export async function fetchPosts(username, minDate, limit) {
+    const response = await get(`/posts`, {
+        username,
+        minDate,
+        limit,
+    });
+    return await response.json();
+}
+
+export async function fetchPost(postUrlSlug) {
+    const response = await get(`/posts/${postUrlSlug}`);
+    return await response.json();
+}
+
+export async function fetchPostComments(postUrlSlug) {
+    const response = await get(`/posts/${postUrlSlug}/comments`);
+    return await response.json();
 }
 
 export async function fetchUser(username) {
-    // TODO
-    await wait(1000 * 3);
-    return {
-        username: "tobloef"
-    };
+    const response = await get(`/users/${username}`);
+    return await response.json();
 }
 
 export async function login(username, password) {
-    // TODO
-    await wait(1000 * 3);
+    const response = await post(`/auth/login`, {
+        username,
+        password,
+    });
+    return await response.json();
 }
 
 export async function registerUser(username, password) {
-    // TODO
-    await wait(1000 * 3);
+    const response = await post(`/auth/register`, {
+        username,
+        password,
+    });
+    return await response.json();
 }
 
 export async function createPost(title, content) {
-    // TODO
-    await wait(1000 * 3);
+    const response = await post(`/posts`, {
+        title,
+        content,
+    });
+    return await response.json();
+}
+
+export async function createComment(postUrlSlug, content) {
+    const response = await post(`/posts/${postUrlSlug}/comments`, {
+        content,
+    });
+    return await response.json();
 }
 

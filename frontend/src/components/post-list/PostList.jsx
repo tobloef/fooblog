@@ -20,7 +20,7 @@ class PostList extends React.Component {
                 content={posts[i].content}
                 datePosted={posts[i].datePosted}
                 author={posts[i].author}
-                postSlug={posts[i].postSlug}
+                urlSlug={posts[i].urlSlug}
             />);
         }
         return postItems;
