@@ -1,5 +1,12 @@
 import express from "express";
 import cors from "cors";
+import expressErrorWrapper from "./middlewares/express-error-wrapper.js";
+import createReqLocals from "./middlewares/create-req-locals.js";
+import setAuthTokenFromHeader from "./middlewares/set-auth-token-from-header.js";
+import handleEndpointNotFound from "./routes/misc/handle-endpoint-not-found.js";
+import usersRouter from "./routes/users/users-routes.js";
+import authRouter from "./routes/auth/auth-routes.js";
+import postsRouter from "./routes/posts/posts-routes.js";
 
 /**
  * Configure an Express app's middlewares.
@@ -18,8 +25,9 @@ function configureMiddlewares(app) {
  * @param app The Express app
  */
 function configureRoutes(app) {
-    app.use("/users", usersRouter());
-    app.use("/auth", authRouter());
+    app.use("/users", usersRouter);
+    app.use("/posts", postsRouter);
+    app.use("/auth", authRouter);
 
     app.all("*", expressErrorWrapper(handleEndpointNotFound));
 }

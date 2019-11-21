@@ -2,6 +2,7 @@
   <dictionary name="toblo">
     <words>
       <w>middlewares</w>
+      <w>timeoutable</w>
     </words>
   </dictionary>
 </component>
