@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import setupApp from "./app.js";
+import * as database from "./database/database.js";
 
 /**
  * SetupScreen the environment, then start the express server

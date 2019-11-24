@@ -1,6 +1,7 @@
 import React from "react";
 import WritePostPage from "./WritePostPage.jsx";
 import {createPost} from "../../api.js";
+import {withRouter} from "react-router-dom";
 
 class WritePostPageContainer extends React.Component {
     state = {
@@ -9,13 +10,22 @@ class WritePostPageContainer extends React.Component {
     };
 
     submitPost = async (title, content) => {
-        this.setState({submitting: true});
+        const {history} = this.props;
+        this.setState({submitting: true, errorMessage: null});
         try {
-            await createPost(title, content);
+            const post = await createPost(title, content);
+            history.push(`/@${post.author.username}/${post.urlSlug}`);
         } catch (error) {
             console.error("Error submitting post.", error);
             let errorMessage = "An error occurred.";
-            // TODO: Check error type
+            switch (error.status) {
+                case 401:
+                    errorMessage = "You need to be logged in to make a post.";
+                    break;
+                case 403:
+                    errorMessage = "You do not have permission to make this post.";
+                    break;
+            }
             this.setState({errorMessage});
         } finally {
             this.setState({submitting: false});
@@ -36,4 +46,4 @@ class WritePostPageContainer extends React.Component {
     }
 }
 
-export default WritePostPageContainer;
+export default withRouter(WritePostPageContainer);

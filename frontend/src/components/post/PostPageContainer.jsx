@@ -16,21 +16,25 @@ class PostPageContainer extends React.Component {
         if (this.props.post != null) {
             this.setState({post: this.props.post});
         } else {
-            const {urlSlug} = this.props.match.params;
+            const {username, urlSlug} = this.props.match.params;
             // noinspection JSIgnoredPromiseFromCall
-            this.fetchPost(urlSlug);
+            this.fetchPost(username, urlSlug);
         }
     }
 
-    fetchPost = async (urlSlug) => {
-        this.setState({loading: true});
+    fetchPost = async (username, urlSlug) => {
+        this.setState({loading: true, errorMessage: null});
         try {
-            const post = await fetchPost(urlSlug);
+            const post = await fetchPost(username, urlSlug);
             this.setState({post});
         } catch (error) {
             console.error("Error fetching post.", error);
             let errorMessage = "An error occurred.";
-            // TODO: Check error type
+            switch (error.status) {
+                case 404:
+                    errorMessage = "The specified post could not be found.";
+                    break;
+            }
             this.setState({errorMessage});
         } finally {
             this.setState({loading: false});

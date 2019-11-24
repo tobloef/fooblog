@@ -1,26 +1,35 @@
-import {db} from "./database.js";
+import {db, firstOrUndefined} from "./database.js";
+
+export async function getUserById(id, includePasswordHash) {
+    return await getUser("id", id, includePasswordHash);
+}
 
 export async function getUserByUsername(username, includePasswordHash) {
+    return await getUser("username", username, includePasswordHash);
+}
+
+async function getUser(selectorKey, selectorValue, includePasswordHash) {
     const query = `
         SELECT
             id,
             username
-            ${includePasswordHash ? ", passwordHash" : ""}
+            ${includePasswordHash ? `, "passwordHash"` : ""}
         FROM users
         WHERE
-            username = $(username)
+            users.$(selectorKey~) = $(selectorValue)
     `;
     const params = {
-        username,
+        selectorKey,
+        selectorValue,
     };
-    return await db.one(query, params);
+    return await firstOrUndefined(query, params);
 }
 
 export async function insertUser(user) {
     const query = `
         INSERT INTO users (
             username,
-            passwordHash
+            "passwordHash"
         ) VALUES (
             $(username),
             $(passwordHash)

@@ -24,7 +24,7 @@ class LoginPageContainer extends React.Component {
     login = async (username, password) => {
         const {setLoggedInUser, history} = this.props;
 
-        this.setState({submitting: true});
+        this.setState({submitting: true, errorMessage: null});
         try {
             const authToken = await login(username, password);
             setAuthToken(authToken);
@@ -34,7 +34,14 @@ class LoginPageContainer extends React.Component {
         } catch (error) {
             console.error("Error logging in.", error);
             let errorMessage = "An error occurred.";
-            // TODO: Check error type
+            switch (error.status) {
+                case 404:
+                    errorMessage = "This user does not exist.";
+                    break;
+                case 401:
+                    errorMessage = "The given password is incorrect.";
+                    break;
+            }
             this.setState({errorMessage});
         } finally {
             this.setState({submitting: false});

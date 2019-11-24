@@ -1,5 +1,7 @@
-import {insertPost} from "../../database/posts.js";
+import {getPost, insertPost} from "../../database/posts.js";
 import crypto from "crypto";
+
+const ADD_RANDOMNESS_TO_URL_SLUGS = false;
 
 const handleCreateNewPost = async (req, res) => {
     const {
@@ -27,8 +29,13 @@ const handleCreateNewPost = async (req, res) => {
         authorId: user.id,
         datePosted: new Date(),
     };
+
     await insertPost(post);
-    res.status(200).send();
+    const insertedPost = await getPost(user.username, urlSlug);
+    if (insertedPost == null) {
+        throw new Error("Couldn't find the inserted post.");
+    }
+    res.send(insertedPost);
 };
 
 function titleToUrlSlug(title) {
@@ -36,7 +43,9 @@ function titleToUrlSlug(title) {
         .toLowerCase()
         .replace(/[^\w ]+/g,"")
         .replace(/ +/g,"-");
-    urlSlug += `-${crypto.randomBytes(10).toString("hex")}`;
+    if (ADD_RANDOMNESS_TO_URL_SLUGS) {
+        urlSlug += `-${crypto.randomBytes(10).toString("hex")}`;
+    }
     return urlSlug;
 }
 

@@ -1,7 +1,7 @@
-import {getPostByUrlSlug} from "../../database/posts.js";
+import {getPost} from "../../database/posts.js";
 import {insertComment} from "../../database/comments.js";
 
-const handleCreateNewComment = async (req, res) => {
+const handleCreateUserPostComment = async (req, res) => {
     const {
         content
     } = req.body;
@@ -18,7 +18,7 @@ const handleCreateNewComment = async (req, res) => {
     if (content == null) {
         return res.status(400).send("Content is missing.");
     }
-    const post = await getPostByUrlSlug(urlSlug);
+    const post = await getPost(urlSlug);
     if (post == null) {
         return res.status(400).send("Invalid post to add comment to.");
     }
@@ -32,13 +32,4 @@ const handleCreateNewComment = async (req, res) => {
     res.status(200).send();
 };
 
-function titleToUrlSlug(title) {
-    let urlSlug = title
-        .toLowerCase()
-        .replace(/[^\w ]+/g,"")
-        .replace(/ +/g,"-");
-    urlSlug += `-${crypto.randomBytes(10).toString("hex")}`;
-    return urlSlug;
-}
-
-export default handleCreateNewComment;
+export default handleCreateUserPostComment;

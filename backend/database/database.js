@@ -53,3 +53,7 @@ export async function testConnection() {
     }));
     await timeoutablePromiseWrapper(TIMEOUT, promise);
 }
+
+export async function firstOrUndefined(query, params) {
+    return (await db.any(query, params) || [])[0];
+}

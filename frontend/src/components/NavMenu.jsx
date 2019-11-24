@@ -45,7 +45,6 @@ class NavMenu extends React.Component {
         return <Menu
             fixed={"top"}
             borderless={true}
-            stackable={true}
         >
             <Container>
                 <Menu.Item

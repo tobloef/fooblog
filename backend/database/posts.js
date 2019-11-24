@@ -1,21 +1,24 @@
-import {db} from "./database.js";
+import {db, firstOrUndefined} from "./database.js";
 
-export async function getPostByUrlSlug(urlSlug) {
+export async function getPost(username, urlSlug) {
     const query = `
         SELECT
             posts.*,
             json_build_object(
               'id',  users.id,
               'username', users.username
-            ) as user
+            ) as author
         FROM posts
         JOIN users ON users.id = posts."authorId"
-        WHERE "urlSlug" = $(urlSlug)
+        WHERE
+            "urlSlug" = $(urlSlug) AND
+            "username" = $(username)
     `;
     const params = {
-        urlSlug
+        urlSlug,
+        username
     };
-    return await db.any(query, params);
+    return await firstOrUndefined(query, params);
 }
 
 export async function getPosts(username, maxDate, limit = 10) {
@@ -25,11 +28,11 @@ export async function getPosts(username, maxDate, limit = 10) {
             json_build_object(
               'id',  users.id,
               'username', users.username
-            ) as user
+            ) as author
         FROM posts
         JOIN users ON users."id" = posts."authorId"
         WHERE
-            posts."datePosted" > $(maxDate)
+            ($(maxDate) IS NULL OR posts."datePosted" > $(maxDate))
             ${username ? `AND users."username" = $(username)` : ""}
         ORDER BY posts."datePosted"
         LIMIT $(limit)

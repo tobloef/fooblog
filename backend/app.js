@@ -4,9 +4,10 @@ import expressErrorWrapper from "./middlewares/express-error-wrapper.js";
 import createReqLocals from "./middlewares/create-req-locals.js";
 import setAuthTokenFromHeader from "./middlewares/set-auth-token-from-header.js";
 import handleEndpointNotFound from "./routes/misc/handle-endpoint-not-found.js";
-import usersRouter from "./routes/users/users-routes.js";
-import authRouter from "./routes/auth/auth-routes.js";
-import postsRouter from "./routes/posts/posts-routes.js";
+import usersRouter from "./routes/users/users-router.js";
+import authRouter from "./routes/auth/auth-router.js";
+import postsRouter from "./routes/posts/posts-router.js";
+import {setUserFromAuthToken} from "./middlewares/set-user-from-auth-token.js";
 
 /**
  * Configure an Express app's middlewares.
@@ -18,6 +19,7 @@ function configureMiddlewares(app) {
     app.use(express.json());
     app.use(expressErrorWrapper(createReqLocals));
     app.use(expressErrorWrapper(setAuthTokenFromHeader("Authorization")));
+    app.use(expressErrorWrapper(setUserFromAuthToken));
 }
 
 /**

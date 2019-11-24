@@ -2,7 +2,7 @@ import React from "react";
 import PostList from "./PostList.jsx";
 import {Button, Message} from "semantic-ui-react";
 import PropTypes from "prop-types";
-import {fetchPost, fetchPosts} from "../../api.js";
+import {fetchPost, fetchPosts, fetchUserPosts} from "../../api.js";
 
 class PostListContainer extends React.Component {
     POSTS_TO_LOAD = 10;
@@ -41,7 +41,12 @@ class PostListContainer extends React.Component {
             postCount: postCount + this.POSTS_TO_LOAD
         });
         try {
-            const newPosts = await fetchPosts(username, oldestDateLoaded, this.POSTS_TO_LOAD);
+            let newPosts;
+            if (username != null) {
+                newPosts = await fetchUserPosts(username, oldestDateLoaded, this.POSTS_TO_LOAD);
+            } else {
+                newPosts = await fetchPosts(oldestDateLoaded, this.POSTS_TO_LOAD);
+            }
             if (newPosts == null) {
                 throw new Error("New posts is null.");
             }
@@ -65,7 +70,6 @@ class PostListContainer extends React.Component {
         } catch (error) {
             console.error("Error fetching posts.", error);
             let errorMessage = "An error occurred.";
-            // TODO: Check error type
             this.setState({errorMessage});
         } finally {
             this.setState({loadingPosts: false});

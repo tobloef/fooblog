@@ -33,6 +33,13 @@ class PostList extends React.Component {
             showPlaceholders
         } = this.props;
 
+        if (posts == null || posts.length === 0) {
+            return <p style={{
+                color: "grey",
+                textAlign: "center",
+            }}>No posts was found.</p>
+        }
+
         return <div>{this.getPostItems(posts, postCount, showPlaceholders)}</div>
     }
 }

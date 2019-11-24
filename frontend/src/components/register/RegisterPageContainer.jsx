@@ -14,6 +14,7 @@ class RegisterPageContainer extends React.Component {
         registrationCompleted: false,
         username: "",
         password: "",
+        confirmPassword: "",
     };
 
     componentDidMount() {
@@ -23,15 +24,28 @@ class RegisterPageContainer extends React.Component {
         }
     }
 
-    register = async (username, password) => {
-        this.setState({submitting: true});
+    register = async (username, password, confirmPassword) => {
+        this.setState({submitting: true, errorMessage: null});
         try {
+            if (confirmPassword !== password) {
+                this.setState({errorMessage: "Passwords doesn't match."});
+                return;
+            }
             await registerUser(username, password);
-            this.setState({registrationCompleted: true});
+            this.setState({
+                registrationCompleted: true,
+                username: "",
+                password: "",
+                confirmPassword: ""
+            });
         } catch (error) {
             console.error("Error registering user.", error);
             let errorMessage = "An error occurred.";
-            // TODO: Check error type
+            switch (error.status) {
+                case 409:
+                    errorMessage = "A user with the given username already exists.";
+                    break;
+            }
             this.setState({errorMessage});
         } finally {
             this.setState({submitting: false});
@@ -45,22 +59,27 @@ class RegisterPageContainer extends React.Component {
             submitting,
             username,
             password,
+            confirmPassword
         } = this.state;
 
         return <>
             <Header as="h1" content={"Register user"} />
             <RegisterForm
-                register={async () => {
+                onSubmit={async () => {
                     if (submitting) {
                         return;
                     }
-                    await this.register(username, password);
+                    await this.register(username, password, confirmPassword);
                 }}
                 errorMessage={errorMessage}
                 submitting={submitting}
                 registrationCompleted={registrationCompleted}
+                username={username}
+                password={password}
+                confirmPassword={confirmPassword}
                 onChangeUsername={(value) => this.setState({username: value})}
                 onChangePassword={(value) => this.setState({password: value})}
+                onChangeConfirmPassword={(value) => this.setState({confirmPassword: value})}
             />
         </>
     }

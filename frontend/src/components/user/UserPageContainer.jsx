@@ -19,14 +19,18 @@ class UserPageContainer extends React.Component {
     }
 
     fetchUser = async (username) => {
-        this.setState({loading: true});
+        this.setState({loading: true, errorMessage: null});
         try {
             const user = await fetchUser(username);
             this.setState({user});
         } catch (error) {
             console.error("Error fetching user.", error);
             let errorMessage = "An error occurred.";
-            // TODO: Check error type
+            switch (error.status) {
+                case 404:
+                    errorMessage = "This user does not exist.";
+                    break;
+            }
             this.setState({errorMessage});
         } finally {
             this.setState({loading: false});

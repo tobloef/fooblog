@@ -1,15 +1,16 @@
 import {db} from "./database.js";
 
-export async function getCommentsByPostSlug(postUrlSlug) {
+export async function getPostComments(username, postUrlSlug) {
     let query = `
         SELECT *
         FROM comments
         JOIN posts ON posts."id" = comments."postId"
         LEFT JOIN users ON users."id" = comments."authorId"
-        WHERE posts."postUrlSlug" = $(postUrlSlug)
+        WHERE posts."urlSlug" = $(postUrlSlug)
         ORDER BY "datePosted"
     `;
     const params = {
+        username,
         postUrlSlug
     };
     return await db.any(query, params);

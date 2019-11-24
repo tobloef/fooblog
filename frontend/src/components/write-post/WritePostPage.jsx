@@ -14,7 +14,7 @@ class WritePostPage extends React.Component {
 
         return <div>
             <Header
-                content={"Write new blog post"}
+                content={"Write a new blog post"}
             />
             {
                 errorMessage != null && <Message
@@ -44,7 +44,7 @@ class WritePostPage extends React.Component {
                     <label>Content</label>
                     <TextArea
                         placeholder={"Content"}
-                        value={title}
+                        value={content}
                         onChange={(e, {value}) => this.setState({content: value})}
                         style={{
                             marginBottom: "10px",

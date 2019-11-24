@@ -12,8 +12,10 @@ class RegisterForm extends React.Component {
             registrationCompleted,
             username,
             password,
+            confirmPassword,
             onChangeUsername,
             onChangePassword,
+            onChangeConfirmPassword,
         } = this.props;
 
         return <>
@@ -25,7 +27,7 @@ class RegisterForm extends React.Component {
                 />
             }
             {
-                registrationCompleted != null && <Message success>
+                registrationCompleted && <Message success>
                     <Message.Header>Registration succeeded</Message.Header>
                     <p>Continue to the <Link to={"/login"}>log-in page</Link> to log in to your new account.</p>
                 </Message>
@@ -48,6 +50,15 @@ class RegisterForm extends React.Component {
                         type={"password"}
                     />
                 </Form.Field>
+                <Form.Field>
+                    <label>Confirm password</label>
+                    <Input
+                        value={confirmPassword}
+                        onChange={(e, {value}) => onChangeConfirmPassword(value)}
+                        placeholder={"Confirm password"}
+                        type={"password"}
+                    />
+                </Form.Field>
                 <Button
                     type={"submit"}
                     primary
@@ -65,6 +76,7 @@ RegisterForm.propTypes = {
     submitting: PropTypes.bool,
     username: PropTypes.string,
     password: PropTypes.string,
+    confirmPassword: PropTypes.string,
     onChangeUsername: PropTypes.func,
     onChangePassword: PropTypes.func,
 };

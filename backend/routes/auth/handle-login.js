@@ -17,10 +17,11 @@ const handleLogin = async (req, res) => {
         return res.status(401).send("Incorrect password.");
     }
     const payload = {
-        id: user.id,
-        username: user.username,
+        user: {
+            id: user.id,
+            username: user.username,
+        }
     };
-    let jwtSecret;
     const jwt = await generateAuthToken(payload);
     // Send auth token
     return res.send(jwt);

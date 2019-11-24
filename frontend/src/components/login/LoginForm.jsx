@@ -14,8 +14,6 @@ class LoginForm extends React.Component {
             onChangePassword,
         } = this.props;
 
-        console.log("LoginForm", errorMessage);
-
         return <>
             {
                 errorMessage != null && <Message

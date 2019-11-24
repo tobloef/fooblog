@@ -8,17 +8,16 @@ const handleRegister = async (req, res) => {
     if (username == null || password == null) {
         return res.status(400).send("Missing username or password.");
     }
-    const passwordHash = hashPassword(password);
+    const existingUser = await getUserByUsername(username);
+    if (existingUser != null) {
+        return res.status(409).send("A user with that username already exists.");
+    }
+    const passwordHash = await hashPassword(password);
     const user = {
         username,
         passwordHash,
     };
-    try {
-        await insertUser(user);
-    } catch (error) {
-        console.error(error);
-        // TODO
-    }
+    await insertUser(user);
     res.status(200).send();
 };
 
