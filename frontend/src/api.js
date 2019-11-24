@@ -1,4 +1,3 @@
-import wait from "./wait-promise.js";
 
 let authToken;
 
@@ -47,10 +46,10 @@ function generateQueryString(query) {
         .join("&");
 }
 
-export async function fetchPosts(username, minDate, limit) {
+export async function fetchPosts(username, maxDate, limit) {
     const response = await get(`/posts`, {
         username,
-        minDate,
+        maxDate,
         limit,
     });
     return await response.json();

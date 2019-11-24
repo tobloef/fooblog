@@ -16,6 +16,7 @@ const handleRegister = async (req, res) => {
     try {
         await insertUser(user);
     } catch (error) {
+        console.error(error);
         // TODO
     }
     res.status(200).send();

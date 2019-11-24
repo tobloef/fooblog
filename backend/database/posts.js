@@ -18,7 +18,7 @@ export async function getPostByUrlSlug(urlSlug) {
     return await db.any(query, params);
 }
 
-export async function getPosts(username, minDate, limit = 10) {
+export async function getPosts(username, maxDate, limit = 10) {
     let query = `
         SELECT 
             posts.*,
@@ -29,14 +29,14 @@ export async function getPosts(username, minDate, limit = 10) {
         FROM posts
         JOIN users ON users."id" = posts."authorId"
         WHERE
-            posts."datePosted" > $(minDate)
+            posts."datePosted" > $(maxDate)
             ${username ? `AND users."username" = $(username)` : ""}
         ORDER BY posts."datePosted"
         LIMIT $(limit)
     `;
     const params = {
         username,
-        minDate,
+        maxDate,
         limit
     };
     return await db.any(query, params);
