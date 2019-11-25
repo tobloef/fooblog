@@ -63,6 +63,11 @@ class NavMenu extends React.Component {
                     to={"/"}
                     content={"All posts"}
                 />
+                <Menu.Item
+                    as={"a"}
+                    href={"https://github.com/tobloef/exploring-backends"}
+                    content={"GitHub"}
+                />
                 <Menu.Menu
                     position={"right"}
                 >
