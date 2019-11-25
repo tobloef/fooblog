@@ -1,5 +1,5 @@
 import React from "react";
-import {Header} from "semantic-ui-react";
+import {Header, Segment} from "semantic-ui-react";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 import moment from "moment";
@@ -21,7 +21,9 @@ class PostPage extends React.Component {
                     <Byline datePosted={datePosted} author={author} />
                 </Header.Subheader>
             </Header>
-            <p>{content}</p>
+            <p style={{
+                whiteSpace: "pre-line",
+            }}>{content}</p>
         </div>
     }
 }

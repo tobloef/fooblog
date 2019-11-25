@@ -7,7 +7,7 @@ export async function getPostComments(username, postUrlSlug) {
         JOIN posts ON posts."id" = comments."postId"
         LEFT JOIN users ON users."id" = comments."authorId"
         WHERE posts."urlSlug" = $(postUrlSlug)
-        ORDER BY "datePosted"
+        ORDER BY "datePosted" DESC
     `;
     const params = {
         username,
