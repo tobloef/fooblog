@@ -6,18 +6,18 @@ import moment from "moment";
 class Byline extends React.Component {
     render() {
         const {
-            author,
+            authorUsername,
             datePosted
         } = this.props;
 
-        const authorLink = <Link to={`/@${author.username}`}>@{author.username}</Link>;
+        const authorLink = <Link to={`/@${authorUsername}`}>@{authorUsername}</Link>;
         const dateStr = moment(datePosted).calendar();
         return <>Written by {authorLink} ({dateStr})</>
     }
 }
 
 Byline.propTypes = {
-    author: PropTypes.object.isRequired,
+    authorUsername: PropTypes.string.isRequired,
     datePosted: PropTypes.any.isRequired
 };
 

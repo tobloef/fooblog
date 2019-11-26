@@ -21,6 +21,7 @@ class PostList extends React.Component {
                 datePosted={posts[i].datePosted}
                 author={posts[i].author}
                 urlSlug={posts[i].urlSlug}
+                commentCount={posts[i].commentCount}
             />);
         }
         return postItems;

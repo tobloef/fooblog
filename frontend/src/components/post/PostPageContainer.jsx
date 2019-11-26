@@ -47,6 +47,9 @@ class PostPageContainer extends React.Component {
             loading,
             errorMessage
         } = this.state;
+        const {
+            user
+        } = this.props;
 
         if (loading) {
             return <PostPagePlaceholder />
@@ -64,6 +67,8 @@ class PostPageContainer extends React.Component {
             content={post.content}
             datePosted={post.datePosted}
             author={post.author}
+            urlSlug={post.urlSlug}
+            user={user}
         />
     }
 }

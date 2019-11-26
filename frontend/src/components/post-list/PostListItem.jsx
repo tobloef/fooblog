@@ -14,6 +14,7 @@ class PostListItem extends React.Component {
             content,
             datePosted,
             author,
+            commentCount,
         } = this.props;
 
         const postLinkPath = `/@${author.username}/${urlSlug}`;
@@ -33,7 +34,8 @@ class PostListItem extends React.Component {
                     ellipsis={<span>... <Link to={postLinkPath}>Read more</Link></span>}
                 >{content}</Truncate>
             </p>
-            <p><Byline datePosted={datePosted} author={author}/></p>
+            <p><Byline datePosted={datePosted} authorUsername={author.username}/></p>
+            <p>{commentCount || 0} comments</p>
         </Segment>
     }
 }

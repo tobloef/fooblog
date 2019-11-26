@@ -28,7 +28,12 @@ export async function getPosts(username, maxDate, limit = 10) {
             json_build_object(
               'id',  users.id,
               'username', users.username
-            ) as author
+            ) as author,
+            (
+                SELECT COUNT(*)
+                FROM comments
+                WHERE comments."postId" = posts.id
+            ) as "commentCount"
         FROM posts
         JOIN users ON users."id" = posts."authorId"
         WHERE

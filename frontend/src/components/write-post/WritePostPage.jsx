@@ -28,6 +28,7 @@ class WritePostPage extends React.Component {
                     return;
                 }
                 onSubmit(title, content);
+                this.setState({title: "", content: ""});
             }}>
                 <Form.Field>
                     <label>Title</label>
