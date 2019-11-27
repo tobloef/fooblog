@@ -33,16 +33,7 @@ class LoginPageContainer extends React.Component {
             history.push("/");
         } catch (error) {
             console.error("Error logging in.", error);
-            let errorMessage = "An error occurred.";
-            switch (error.status) {
-                case 404:
-                    errorMessage = "This user does not exist.";
-                    break;
-                case 401:
-                    errorMessage = "The given password is incorrect.";
-                    break;
-            }
-            this.setState({errorMessage});
+            this.setState({errorMessage: error.statusText || "An error occurred."});
         } finally {
             this.setState({submitting: false});
         }

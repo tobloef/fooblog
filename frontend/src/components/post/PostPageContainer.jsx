@@ -29,13 +29,7 @@ class PostPageContainer extends React.Component {
             this.setState({post});
         } catch (error) {
             console.error("Error fetching post.", error);
-            let errorMessage = "An error occurred.";
-            switch (error.status) {
-                case 404:
-                    errorMessage = "The specified post could not be found.";
-                    break;
-            }
-            this.setState({errorMessage});
+            this.setState({errorMessage: error.statusText || "An error occurred."});
         } finally {
             this.setState({loading: false});
         }

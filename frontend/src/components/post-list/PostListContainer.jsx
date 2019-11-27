@@ -69,8 +69,7 @@ class PostListContainer extends React.Component {
             });
         } catch (error) {
             console.error("Error fetching posts.", error);
-            let errorMessage = "An error occurred.";
-            this.setState({errorMessage});
+            this.setState({errorMessage: error.statusText || "An error occurred."});
         } finally {
             this.setState({loadingPosts: false});
         }

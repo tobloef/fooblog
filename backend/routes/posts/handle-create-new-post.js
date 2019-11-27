@@ -1,5 +1,6 @@
 import {getPost, insertPost} from "../../database/posts.js";
 import crypto from "crypto";
+import {validateContent, validateTitle} from "../../validation.js";
 
 const ADD_RANDOMNESS_TO_URL_SLUGS = false;
 
@@ -15,12 +16,13 @@ const handleCreateNewPost = async (req, res) => {
     if (user == null) {
         return res.status(401).send("User not logged in.");
     }
-    if (title == null) {
-        return res.status(400).send("Title is missing.");
+    if (!validateTitle(title)) {
+        return res.status(400).send("Invalid title.");
     }
-    if (content == null) {
-        return res.status(400).send("Content is missing.");
+    if (!validateContent(content)) {
+        return res.status(400).send("Invalid content.");
     }
+
     const urlSlug = titleToUrlSlug(title);
     const post = {
         title,

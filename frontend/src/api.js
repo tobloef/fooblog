@@ -71,6 +71,8 @@ export async function createComment(username, postUrlSlug, content) {
     return await response.json();
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 async function get(url, queryParams) {
     if (url.startsWith("/")) {
         url = baseUrl + url;
@@ -88,6 +90,7 @@ async function get(url, queryParams) {
     if (response.status !== 200) {
         const error = new Error(`Request responded with non-success code: ${response.status} - ${response.statusText}`);
         error.status = response.status;
+        error.statusText = await response.text();
         throw error;
     }
     return response;
@@ -111,6 +114,7 @@ async function post(url, data, queryParams) {
     if (response.status !== 200) {
         const error = new Error(`Request responded with non-success code: ${response.status} - ${response.statusText}`);
         error.status = response.status;
+        error.statusText = await response.text();
         throw error;
     }
     return response;

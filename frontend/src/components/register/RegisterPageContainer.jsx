@@ -40,13 +40,7 @@ class RegisterPageContainer extends React.Component {
             });
         } catch (error) {
             console.error("Error registering user.", error);
-            let errorMessage = "An error occurred.";
-            switch (error.status) {
-                case 409:
-                    errorMessage = "A user with the given username already exists.";
-                    break;
-            }
-            this.setState({errorMessage});
+            this.setState({errorMessage: error.statusText || "An error occurred."});
         } finally {
             this.setState({submitting: false});
         }

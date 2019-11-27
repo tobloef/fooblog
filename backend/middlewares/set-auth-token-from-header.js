@@ -10,6 +10,10 @@ const setAuthTokenFromHeader = (headerName) => (req, res, next = (() => true)) =
         return next();
     }
     const [_, authToken] = header.split(" ");
+    if (authToken != null && authToken.length > 1000000) {
+        res.status(400).send("Auth token too long");
+        return;
+    }
     req.locals.authToken = authToken;
     return next();
 };

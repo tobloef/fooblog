@@ -1,5 +1,6 @@
 import {getPost} from "../../database/posts.js";
 import {getComment, insertComment} from "../../database/comments.js";
+import {validateContent} from "../../validation.js";
 
 const handleCreateUserPostComment = async (req, res) => {
     const {
@@ -16,9 +17,11 @@ const handleCreateUserPostComment = async (req, res) => {
     if (user == null) {
         return res.status(401).send("User not logged in.");
     }
-    if (content == null) {
-        return res.status(400).send("Content is missing.");
+
+    if (!validateContent(content)) {
+        return res.status(400).send("Invalid content.")
     }
+
     const post = await getPost(username, urlSlug);
     if (post == null) {
         return res.status(400).send("Invalid post to add comment to.");

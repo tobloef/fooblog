@@ -25,13 +25,7 @@ class UserPageContainer extends React.Component {
             this.setState({user});
         } catch (error) {
             console.error("Error fetching user.", error);
-            let errorMessage = "An error occurred.";
-            switch (error.status) {
-                case 404:
-                    errorMessage = "This user does not exist.";
-                    break;
-            }
-            this.setState({errorMessage});
+            this.setState({errorMessage: error.statusText || "An error occurred."});
         } finally {
             this.setState({loading: false});
         }

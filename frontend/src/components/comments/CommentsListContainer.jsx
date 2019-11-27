@@ -42,8 +42,9 @@ class CommentsListContainer extends React.Component {
             });
         } catch (error) {
             console.error("Error fetching comments.", error);
-            let fetchCommentsErrorMessage = "An error occurred.";
-            this.setState({fetchCommentsErrorMessage});
+            this.setState({
+                fetchCommentsErrorMessage: error.statusText || "An error occurred."
+            });
         } finally {
             this.setState({fetchCommentsLoading: false});
         }
@@ -71,8 +72,9 @@ class CommentsListContainer extends React.Component {
             })
         } catch (error) {
             console.error("Error submitting comment.", error);
-            let submitCommentErrorMessage = "An error occurred.";
-            this.setState({submitCommentErrorMessage});
+            this.setState({
+                submitCommentErrorMessage: error.statusText || "An error occurred."
+            });
         } finally {
             this.setState({submitCommentLoading: false});
         }

@@ -17,16 +17,7 @@ class WritePostPageContainer extends React.Component {
             history.push(`/@${post.author.username}/${post.urlSlug}`);
         } catch (error) {
             console.error("Error submitting post.", error);
-            let errorMessage = "An error occurred.";
-            switch (error.status) {
-                case 401:
-                    errorMessage = "You need to be logged in to make a post.";
-                    break;
-                case 403:
-                    errorMessage = "You do not have permission to make this post.";
-                    break;
-            }
-            this.setState({errorMessage});
+            this.setState({errorMessage: error.statusText || "An error occurred."});
         } finally {
             this.setState({submitting: false});
         }
