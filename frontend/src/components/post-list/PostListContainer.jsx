@@ -54,7 +54,7 @@ class PostListContainer extends React.Component {
                 noMorePosts = true;
             }
             oldestDateLoaded = newPosts.reduce((oldest, post) => {
-                if (oldestDateLoaded == null || oldest > post.datePosted) {
+                if (oldestDateLoaded == null || oldest < post.datePosted) {
                     oldest = post.datePosted;
                 }
                 return oldest;

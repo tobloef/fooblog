@@ -37,7 +37,7 @@ export async function getPosts(username, maxDate, limit = 10) {
         FROM posts
         JOIN users ON users."id" = posts."authorId"
         WHERE
-            ($(maxDate) IS NULL OR posts."datePosted" > $(maxDate))
+            ($(maxDate) IS NULL OR posts."datePosted" < $(maxDate))
             ${username ? `AND users."username" = $(username)` : ""}
         ORDER BY posts."datePosted" DESC
         LIMIT $(limit)
