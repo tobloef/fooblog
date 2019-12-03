@@ -6,7 +6,6 @@ import PropTypes from "prop-types";
 
 class LogoutPage extends React.Component {
     componentDidMount() {
-        // noinspection JSIgnoredPromiseFromCall
         this.logout();
     }
 

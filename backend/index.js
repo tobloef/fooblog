@@ -21,5 +21,4 @@ async function start() {
     }
 }
 
-// noinspection JSIgnoredPromiseFromCall
 start();

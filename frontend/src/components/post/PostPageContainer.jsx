@@ -17,7 +17,6 @@ class PostPageContainer extends React.Component {
             this.setState({post: this.props.post});
         } else {
             const {username, urlSlug} = this.props.match.params;
-            // noinspection JSIgnoredPromiseFromCall
             this.fetchPost(username, urlSlug);
         }
     }

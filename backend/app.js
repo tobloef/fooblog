@@ -39,7 +39,6 @@ function configureRoutes(app) {
  * @param app The Express app
  */
 function configureErrorHandler(app) {
-    // noinspection JSUnresolvedVariable
     if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
         app.use((err, req, res, next) => {
             const message = (err.stack || err);
@@ -55,13 +54,11 @@ function configureErrorHandler(app) {
     }
 }
 
-// noinspection JSValidateJSDoc
 /**
  * Create and configure an express app with a database.
  * @returns {Promise<Express>}
  */
 async function setupApp() {
-    // Create and configure an Express app
     const app = express();
     configureMiddlewares(app);
     configureRoutes(app);

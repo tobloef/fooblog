@@ -14,7 +14,6 @@ class UserPageContainer extends React.Component {
     componentDidMount() {
         const {match} = this.props;
         const {username} = match.params;
-        // noinspection JSIgnoredPromiseFromCall
         this.fetchUser(username);
     }
 

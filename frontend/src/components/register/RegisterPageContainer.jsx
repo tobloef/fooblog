@@ -2,9 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import RegisterForm from "./RegisterForm.jsx";
 import {withRouter} from "react-router-dom";
-import {registerUser, setAuthToken} from "../../api.js";
-import {decodeAuthToken} from "../../auth.js";
-import LoginForm from "../login/LoginForm.jsx";
+import {registerUser} from "../../api.js";
 import {Header} from "semantic-ui-react";
 
 class RegisterPageContainer extends React.Component {

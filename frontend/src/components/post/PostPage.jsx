@@ -1,10 +1,7 @@
 import React from "react";
-import {Divider, Header, Segment} from "semantic-ui-react";
-import {Link} from "react-router-dom";
+import {Divider, Header} from "semantic-ui-react";
 import PropTypes from "prop-types";
-import moment from "moment";
 import Byline from "../Byline.jsx";
-import PostListContainer from "../post-list/PostListContainer.jsx";
 import CommentsListContainer from "../comments/CommentsListContainer.jsx";
 
 class PostPage extends React.Component {

@@ -1,5 +1,5 @@
 import {verifyAuthToken} from "../routes/auth/auth.js";
-import {getUserById, getUserByUsername} from "../database/users.js";
+import {getUserById} from "../database/users.js";
 
 export async function setUserFromAuthToken(req, res, next) {
     const authToken = req.locals.authToken;

@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import {Placeholder, Segment} from "semantic-ui-react";
 
 class PostListItemPlaceholder extends React.Component {

@@ -5,7 +5,6 @@ export function decodeAuthToken(token) {
         throw new Error("Auth token cannot be null");
     }
     try {
-        // noinspection JSUnresolvedVariable
         return jwt.decode(token);
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError) {

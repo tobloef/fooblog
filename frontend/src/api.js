@@ -6,10 +6,6 @@ export function setAuthToken(newAuthToken) {
     authToken = newAuthToken;
 }
 
-export function setBaseUrl(newBaseUrl) {
-    baseUrl = newBaseUrl;
-}
-
 export async function fetchPosts(maxDate, limit) {
     const response = await get(`/posts`, {
         maxDate,
@@ -128,7 +124,6 @@ function generateQueryString(query) {
     return "?" + Object.entries(query)
         .filter(([key, value]) => value != null)
         .map(([key, value]) => {
-            // noinspection JSCheckFunctionSignatures
             return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
         })
         .join("&");

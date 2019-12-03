@@ -11,7 +11,6 @@ export let db;
  * @returns {Promise<void>}
  */
 export async function connect() {
-    // noinspection JSUnresolvedVariable
     const pgpConfig = {
         query: (e) => {
             console.debug(`Executing database query: ${e.query != null ? e.query.trimEnd() : ""}`);
@@ -39,7 +38,6 @@ export async function connect() {
  * @returns {Promise<void>}
  */
 export async function testConnection() {
-    // noinspection ES6MissingAwait
     const promise = new Promise((async (resolve, reject) => {
         try {
             const result = await db.one("SELECT 1+1 AS test");

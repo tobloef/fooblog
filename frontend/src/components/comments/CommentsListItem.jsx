@@ -1,8 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Header, Segment} from "semantic-ui-react";
-import {Link} from "react-router-dom";
-import Truncate from "react-truncate";
+import {Segment} from "semantic-ui-react";
 import Byline from "../Byline.jsx";
 
 class CommentsListItem extends React.Component {

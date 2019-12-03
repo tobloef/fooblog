@@ -2,7 +2,7 @@ import React from "react";
 import PostList from "./PostList.jsx";
 import {Button, Message} from "semantic-ui-react";
 import PropTypes from "prop-types";
-import {fetchPost, fetchPosts, fetchUserPosts} from "../../api.js";
+import {fetchPosts, fetchUserPosts} from "../../api.js";
 
 class PostListContainer extends React.Component {
     POSTS_TO_LOAD = 10;
@@ -21,7 +21,6 @@ class PostListContainer extends React.Component {
             this.setState({posts: this.props.posts});
             return;
         }
-        // noinspection JSIgnoredPromiseFromCall
         this.loadPosts();
     }
 

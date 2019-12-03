@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {createComment, fetchPostComments} from "../../api.js";
-import {Dimmer, Divider, Header, Loader, Message, TextArea} from "semantic-ui-react";
+import {Divider, Header, Message} from "semantic-ui-react";
 import CommentsList from "./CommentsList.jsx";
 import CommentForm from "./CommentForm.jsx";
 
@@ -19,7 +19,6 @@ class CommentsListContainer extends React.Component {
             this.setState({comments: this.props.comments});
             return;
         }
-        // noinspection JSIgnoredPromiseFromCall
         this.loadComments();
     }
 
