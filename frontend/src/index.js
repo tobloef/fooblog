@@ -5,4 +5,6 @@ import App from "./components/App.jsx";
 import "./index.css";
 import "semantic-ui-css/semantic.min.css";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+const app = <App />;
+const root = document.getElementById("root");
+ReactDOM.render(app, root);
