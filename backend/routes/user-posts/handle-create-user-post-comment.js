@@ -17,11 +17,9 @@ const handleCreateUserPostComment = async (req, res) => {
     if (user == null) {
         return res.status(401).send("User not logged in.");
     }
-
     if (!validateContent(content)) {
         return res.status(400).send("Invalid content.")
     }
-
     const post = await getPost(username, urlSlug);
     if (post == null) {
         return res.status(400).send("Invalid post to add comment to.");

@@ -3,6 +3,7 @@ import {db, firstOrUndefined} from "./database.js";
 export async function getPost(username, urlSlug) {
     const query = `
         SELECT
+            posts."id",
             posts."urlSlug",
             posts."title",
             posts."content",
@@ -28,6 +29,7 @@ export async function getPost(username, urlSlug) {
 export async function getPostPreviews(username, maxDate, limit = 10) {
     let query = `
         SELECT 
+            posts."id",
             posts."urlSlug",
             posts."title",
             LEFT(posts."content", 1000) as content,
