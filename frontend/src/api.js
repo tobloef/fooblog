@@ -1,10 +1,6 @@
+import {store} from "./redux/store.js";
 
-let authToken;
 let baseUrl = "http://localhost:3001";
-
-export function setAuthToken(newAuthToken) {
-    authToken = newAuthToken;
-}
 
 export async function fetchPosts(maxDate, limit) {
     const response = await get(`/posts`, {
@@ -76,7 +72,7 @@ async function get(url, queryParams) {
     if (queryParams != null) {
         url += generateQueryString(queryParams);
     }
-
+    const authToken = store.getState().persist.authToken;
     const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -99,6 +95,7 @@ async function post(url, data, queryParams) {
     if (queryParams != null) {
         url += generateQueryString(queryParams);
     }
+    const authToken = store.getState().persist.authToken;
     const response = await fetch(url, {
         method: "POST",
         headers: {

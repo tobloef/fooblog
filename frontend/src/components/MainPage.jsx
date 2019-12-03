@@ -6,29 +6,16 @@ import PropTypes from "prop-types";
 
 class MainPage extends React.Component {
     render() {
-        const {
-            user,
-            setLoggedInUser
-        } = this.props;
-
         return <div>
-            <NavMenu user={user} />
+            <NavMenu />
             <Container text style={{
                 marginTop: "5em",
                 paddingBottom: "2em",
             }}>
-                <MainRoutes
-                    setLoggedInUser={setLoggedInUser}
-                    user={user}
-                />
+                <MainRoutes/>
             </Container>
         </div>
     }
 }
-
-MainPage.propTypes = {
-    user: PropTypes.object,
-    setLoggedInUser: PropTypes.func,
-};
 
 export default MainPage;

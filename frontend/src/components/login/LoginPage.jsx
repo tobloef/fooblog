@@ -1,12 +1,15 @@
 import React from "react";
 import LoginForm from "./LoginForm.jsx";
-import {login, setAuthToken} from "../../api.js";
+import {login} from "../../api.js";
 import {decodeAuthToken} from "../../auth.js";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {Header} from "semantic-ui-react";
+import {connect} from "react-redux";
+import {setUserAction} from "../../redux/reducers/persist/set-user.js";
+import {setAuthTokenAction} from "../../redux/reducers/persist/set-auth-token.js";
 
-class LoginPageContainer extends React.Component {
+class LoginPage extends React.Component {
     state = {
         errorMessage: null,
         submitting: false,
@@ -22,7 +25,7 @@ class LoginPageContainer extends React.Component {
     }
 
     login = async (username, password) => {
-        const {setLoggedInUser, history} = this.props;
+        const {setLoggedInUser, setAuthToken, history} = this.props;
 
         this.setState({submitting: true, errorMessage: null});
         try {
@@ -67,8 +70,18 @@ class LoginPageContainer extends React.Component {
     }
 }
 
-LoginPageContainer.propTypes = {
-    setLoggedInUser: PropTypes.func,
+LoginPage.propTypes = {
+    user: PropTypes.object,
+    setLoggedInUser: PropTypes.func.isRequired,
+    setAuthToken: PropTypes.func.isRequired,
 };
 
-export default withRouter(LoginPageContainer);
+const stateToProps = (state) => ({
+    user: state.persist.user,
+});
+const dispatchToProps = (dispatch) => ({
+    setLoggedInUser: (user) => dispatch(setUserAction(user)),
+    setAuthToken: (authToken) => dispatch(setAuthTokenAction(authToken)),
+});
+
+export default withRouter(connect(stateToProps, dispatchToProps)(LoginPage));

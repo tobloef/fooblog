@@ -4,6 +4,7 @@ import {createComment, fetchPostComments} from "../../api.js";
 import {Divider, Header, Message} from "semantic-ui-react";
 import CommentsList from "./CommentsList.jsx";
 import CommentForm from "./CommentForm.jsx";
+import {connect} from "react-redux";
 
 class CommentsListContainer extends React.Component {
     state = {
@@ -141,4 +142,8 @@ CommentsListContainer.propTypes = {
     user: PropTypes.object
 };
 
-export default CommentsListContainer;
+const stateToProps = (state) => ({
+    user: state.persist.user,
+});
+
+export default connect(stateToProps)(CommentsListContainer);

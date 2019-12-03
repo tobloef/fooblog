@@ -30,7 +30,6 @@ class PostPage extends React.Component {
             <CommentsListContainer
                 authorUsername={author.username}
                 postUrlSlug={urlSlug}
-                user={user}
             />
         </div>
     }
@@ -42,7 +41,6 @@ PostPage.propTypes = {
     datePosted: PropTypes.any.isRequired,
     author: PropTypes.object.isRequired,
     urlSlug: PropTypes.string.isRequired,
-    user: PropTypes.object,
 };
 
 export default PostPage;

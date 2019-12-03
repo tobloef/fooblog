@@ -4,6 +4,7 @@ import RegisterForm from "./RegisterForm.jsx";
 import {withRouter} from "react-router-dom";
 import {registerUser} from "../../api.js";
 import {Header} from "semantic-ui-react";
+import {connect} from "react-redux";
 
 class RegisterPageContainer extends React.Component {
     state = {
@@ -81,4 +82,8 @@ RegisterPageContainer.propTypes = {
     user: PropTypes.object,
 };
 
-export default withRouter(RegisterPageContainer);
+const stateToProps = (state) => ({
+    user: state.persist.user,
+});
+
+export default withRouter(connect(stateToProps)(RegisterPageContainer));

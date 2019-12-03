@@ -2,6 +2,7 @@ import React from "react";
 import {Container, Icon, Menu} from "semantic-ui-react";
 import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
+import {connect} from "react-redux";
 
 class NavMenu extends React.Component {
     getRightMenuItems = () => {
@@ -82,4 +83,10 @@ NavMenu.propTypes = {
     user: PropTypes.object
 };
 
-export default NavMenu;
+const stateToProps = (state) => {
+    return ({
+        user: state.persist.user,
+    });
+};
+
+export default connect(stateToProps)(NavMenu);
