@@ -30,7 +30,7 @@ export async function getPostPreviews(username, maxDate, limit = 10) {
         SELECT 
             posts."urlSlug",
             posts."title",
-            LEFT(posts."content", 1000),
+            LEFT(posts."content", 1000) as content,
             posts."authorId",
             posts."datePosted",
             json_build_object(
