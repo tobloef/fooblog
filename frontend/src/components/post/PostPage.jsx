@@ -11,8 +11,7 @@ class PostPage extends React.Component {
             content,
             datePosted,
             author,
-            urlSlug,
-            user
+            urlSlug
         } = this.props;
 
         return <div>

@@ -6,8 +6,7 @@ import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {Header} from "semantic-ui-react";
 import {connect} from "react-redux";
-import {setUserAction} from "../../redux/reducers/persist/set-user.js";
-import {setAuthTokenAction} from "../../redux/reducers/persist/set-auth-token.js";
+import {setAuthTokenAction, setUserAction} from "../../redux/persist.js";
 
 class LoginPage extends React.Component {
     state = {

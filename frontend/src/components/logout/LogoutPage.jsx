@@ -2,9 +2,8 @@ import React from "react";
 import {Loader} from "semantic-ui-react";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
-import {setUserAction} from "../../redux/reducers/persist/set-user.js";
-import {setAuthTokenAction} from "../../redux/reducers/persist/set-auth-token.js";
 import {connect} from "react-redux";
+import {setAuthTokenAction, setUserAction} from "../../redux/persist.js";
 
 class LogoutPage extends React.Component {
     componentDidMount() {

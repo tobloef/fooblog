@@ -8431,6 +8431,11 @@ recursive-readdir@2.2.2:
   dependencies:
     minimatch "3.0.4"
 
+redux-act@^1.7.7:
+  version "1.7.7"
+  resolved "https://registry.yarnpkg.com/redux-act/-/redux-act-1.7.7.tgz#0ee8140ade95921b6ebbf70be3fc61c8d6c8a4b1"
+  integrity sha512-UKa6QJkrgrQauFtEuGjnZaBa6dKwXjeu/qchY8ifbA+i/UdEEtOZ/lfowaXkgfllr9c/5EAmmlvk0C9J2wSTnw==
+
 redux-persist@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/redux-persist/-/redux-persist-6.0.0.tgz#b4d2972f9859597c130d40d4b146fecdab51b3a8"

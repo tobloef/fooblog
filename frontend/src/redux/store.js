@@ -1,7 +1,7 @@
 import {applyMiddleware, compose, createStore} from "redux";
 import storage from "redux-persist/lib/storage";
 import {persistReducer, persistStore} from "redux-persist";
-import rootReducer from "./root-reducer.js";
+import reducers from "./reducers.js";
 
 const persistConfig = {
     key: "root",
@@ -10,7 +10,7 @@ const persistConfig = {
         "persist",
     ]
 };
-const persistedReducers = persistReducer(persistConfig, rootReducer);
+const persistedReducers = persistReducer(persistConfig, reducers);
 const middlewares = [];
 
 const functions = [

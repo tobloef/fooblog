@@ -95,7 +95,7 @@ class CommentsListContainer extends React.Component {
         return <div>
             <Header
                 content={"Comments"}
-           e />
+            />
             {
                 user != null && <>
                     {
