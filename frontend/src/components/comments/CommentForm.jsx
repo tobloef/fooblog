@@ -1,34 +1,27 @@
-import React from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
 import {Button, Form, TextArea} from "semantic-ui-react";
 
-class CommentForm extends React.Component {
-    state = {
-        content: "",
-    };
+const CommentForm = ({
+    submitting,
+    onSubmit
+}) => {
+    const [content, setContent] = useState("");
 
-    render() {
-        const {
-            submitting,
-            onSubmit,
-        } = this.props;
-        const {
-            content,
-        } = this.state;
-
-        return <Form onSubmit={() => {
+    return (
+        <Form onSubmit={() => {
             if (submitting) {
                 return;
             }
             onSubmit(content);
-            this.setState({content: ""});
+            setContent("");
         }}>
             <Form.Field>
                 <label>Write a new comment</label>
                 <TextArea
                     placeholder={"Content"}
                     value={content}
-                    onChange={(e, {value}) => this.setState({content: value})}
+                    onChange={(e, {value}) => setContent(value)}
                     style={{
                         minHeight: "100px"
                     }}
@@ -41,8 +34,8 @@ class CommentForm extends React.Component {
                 loading={submitting}
             />
         </Form>
-    }
-}
+    );
+};
 
 CommentForm.propTypes = {
     submitting: PropTypes.bool,

@@ -1,54 +1,41 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import UserPage from "./UserPage.jsx";
 import {Message} from "semantic-ui-react";
-import {fetchUser} from "../../api.js";
 import {withRouter} from "react-router-dom";
+import useGenericAsync from "../../use-generic-async.js";
+import * as api from "../../api.js";
 
-class UserPageContainer extends React.Component {
-    state = {
-        user: null,
-        loading: false,
-        errorMessage: null,
-    };
-    
-    componentDidMount() {
-        const {match} = this.props;
-        const {username} = match.params;
-        this.fetchUser(username);
-    }
+const UserPageContainer = ({
+    match,
+}) => {
+    const {username} = match.params;
 
-    fetchUser = async (username) => {
-        this.setState({loading: true, errorMessage: null});
-        try {
-            const user = await fetchUser(username);
-            this.setState({user});
-        } catch (error) {
-            console.error("Error fetching user.", error);
-            this.setState({errorMessage: error.statusText || "An error occurred."});
-        } finally {
-            this.setState({loading: false});
-        }
-    };
+    const [user, setUser] = useState(null);
 
-    render() {
-        const {user, errorMessage, loading} = this.state;
-        const {match} = this.props;
-        const {username} = match.params;
+    const [
+        loading,
+        errorMessage,
+        fetchUser,
+    ] = useGenericAsync(async () => {
+        const newUser = await api.fetchUser(username);
+        setUser(newUser);
+    }, "Error fetching user.");
 
-        if (errorMessage) {
-            return <Message
-                error
-                header={"Couldn't load user"}
-                text={errorMessage}
-            />
-        }
+    useCallback(fetchUser, [username]);
 
-        return <UserPage
-            username={username}
-            posts={(user || {}).posts}
-            loading={loading}
+    if (errorMessage) {
+        return <Message
+            error
+            header={"Couldn't load user"}
+            text={errorMessage}
         />
     }
-}
+
+    return <UserPage
+        username={username}
+        posts={(user || {}).posts}
+        loading={loading}
+    />
+};
 
 export default withRouter(UserPageContainer);

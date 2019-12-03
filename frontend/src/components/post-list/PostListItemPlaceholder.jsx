@@ -1,21 +1,19 @@
 import React from "react";
-import {Placeholder, Segment} from "semantic-ui-react";
+import { Placeholder, Segment } from "semantic-ui-react";
 
-class PostListItemPlaceholder extends React.Component {
-    render() {
-        return <Segment>
-            <Placeholder fluid>
-                <Placeholder.Header>
-                    <Placeholder.Line/>
-                </Placeholder.Header>
-                <Placeholder.Paragraph>
-                    <Placeholder.Line length={"full"} />
-                    <Placeholder.Line length={"full"} />
-                    <Placeholder.Line />
-                </Placeholder.Paragraph>
-            </Placeholder>
-        </Segment>
-    }
-}
+const PostListItemPlaceholder = () => (
+    <Segment>
+        <Placeholder fluid>
+            <Placeholder.Header>
+                <Placeholder.Line/>
+            </Placeholder.Header>
+            <Placeholder.Paragraph>
+                <Placeholder.Line length={"full"}/>
+                <Placeholder.Line length={"full"}/>
+                <Placeholder.Line/>
+            </Placeholder.Paragraph>
+        </Placeholder>
+    </Segment>
+);
 
 export default PostListItemPlaceholder;

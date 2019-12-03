@@ -1,106 +1,49 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import {createComment, fetchPostComments} from "../../api.js";
-import {Divider, Header, Message} from "semantic-ui-react";
+import { Divider, Header, Message } from "semantic-ui-react";
 import CommentsList from "./CommentsList.jsx";
 import CommentForm from "./CommentForm.jsx";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
+import useGenericAsync from "../../use-generic-async.js";
+import * as api from "../../api.js";
 
-class CommentsListContainer extends React.Component {
-    state = {
-        comments: null,
-        fetchCommentsLoading: false,
-        submitCommentLoading: false,
-        fetchCommentsErrorMessage: null,
-        submitCommentErrorMessage: null,
-    };
+const CommentsListContainer = ({
+   authorUsername,
+   postUrlSlug,
+   user,
+}) => {
+    const [ comments, setComments ] = useState(null);
 
-    componentDidMount() {
-        if (this.props.comments != null) {
-            this.setState({comments: this.props.comments});
-            return;
+    const [
+        submitCommentLoading,
+        submitCommentErrorMessage,
+        submitComment
+    ] = useGenericAsync(async (commentContent) => {
+        const comment = await api.createComment(authorUsername, postUrlSlug, commentContent);
+        setComments([comment, ...comments]);
+    }, "Error submitting comment.");
+
+    const [
+        fetchCommentsLoading,
+        fetchCommentsErrorMessage,
+        fetchComments
+    ] = useGenericAsync(async () => {
+        const comments = await api.fetchPostComments(authorUsername, postUrlSlug);
+        if (comments == null) {
+            throw new Error("Fetched comments are null.");
         }
-        this.loadComments();
-    }
+        setComments(comments);
+    }, "Error fetching comments.");
 
-    loadComments = async () => {
-        const {
-            authorUsername,
-            postUrlSlug
-        } = this.props;
+    useEffect(fetchComments, [postUrlSlug, authorUsername]);
 
-        this.setState({
-            fetchCommentsLoading: true,
-        });
-        try {
-            const comments = await fetchPostComments(authorUsername, postUrlSlug);
-            if (comments == null) {
-                throw new Error("Fetched comments are null.");
-            }
-            this.setState({
-                comments,
-            });
-        } catch (error) {
-            console.error("Error fetching comments.", error);
-            this.setState({
-                fetchCommentsErrorMessage: error.statusText || "An error occurred."
-            });
-        } finally {
-            this.setState({fetchCommentsLoading: false});
-        }
-    };
-
-    submitComment = async (commentContent) => {
-        const {
-            authorUsername,
-            postUrlSlug
-        } = this.props;
-        const {
-            comments
-        } = this.state;
-
-        this.setState({
-            submitCommentLoading: true,
-        });
-        try {
-            const comment = await createComment(authorUsername, postUrlSlug, commentContent);
-            this.setState({
-                comments: [
-                    comment,
-                    ...comments
-                ]
-            })
-        } catch (error) {
-            console.error("Error submitting comment.", error);
-            this.setState({
-                submitCommentErrorMessage: error.statusText || "An error occurred."
-            });
-        } finally {
-            this.setState({submitCommentLoading: false});
-        }
-    };
-
-    render() {
-        const {
-            submitCommentLoading,
-            fetchCommentsLoading,
-            submitCommentErrorMessage,
-            fetchCommentsErrorMessage,
-            comments,
-        } = this.state;
-        const {
-            user
-        } = this.props;
-
-        return <div>
-            <Header
-                content={"Comments"}
-            />
+    return (
+        <>
+            <Header content={"Comments"}/>
             {
                 user != null && <>
                     {
-                        submitCommentErrorMessage != null &&
-                        <Message
+                        submitCommentErrorMessage != null && <Message
                             error
                             header={"Couldn't submit comment"}
                             content={submitCommentErrorMessage}
@@ -110,31 +53,31 @@ class CommentsListContainer extends React.Component {
                         />
                     }
                     <CommentForm
-                        onSubmit={this.submitComment}
+                        onSubmit={submitComment}
                         loading={submitCommentLoading}
                     />
                     <Divider/>
                 </>
             }
-            {(() => {
-                if (fetchCommentsErrorMessage != null) {
-                    return <Message
-                        error
-                        header={"Couldn't load comments"}
-                        content={fetchCommentsErrorMessage}
-                        style={{
-                            marginTop: "0px"
-                        }}
-                    />
-                }
-                return <CommentsList
+            {
+                fetchCommentsErrorMessage != null && <Message
+                    error
+                    header={"Couldn't load comments"}
+                    content={fetchCommentsErrorMessage}
+                    style={{
+                        marginTop: "0px"
+                    }}
+                />
+            }
+            {
+                fetchCommentsErrorMessage == null && <CommentsList
                     comments={comments}
                     loading={fetchCommentsLoading}
                 />
-            })()}
-        </div>
-    }
-}
+            }
+        </>
+    );
+};
 
 CommentsListContainer.propTypes = {
     postUrlSlug: PropTypes.string.isRequired,

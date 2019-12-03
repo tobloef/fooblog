@@ -1,65 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PostPage from "./PostPage.jsx";
 import {withRouter} from "react-router-dom";
 import {Message} from "semantic-ui-react";
 import PostPagePlaceholder from "./PostPagePlaceholder.jsx";
-import {fetchPost} from "../../api.js";
+import useGenericAsync from "../../use-generic-async.js";
+import * as api from "../../api.js";
 
-class PostPageContainer extends React.Component {
-    state = {
-        post: null,
-        loading: false,
-        errorMessage: null,
-    };
+const PostPageContainer = ({
+    match,
+}) => {
+    const [post, setPost] = useState(null);
+    const {username, urlSlug} = match.params;
 
-    componentDidMount() {
-        if (this.props.post != null) {
-            this.setState({post: this.props.post});
-        } else {
-            const {username, urlSlug} = this.props.match.params;
-            this.fetchPost(username, urlSlug);
-        }
+    const [
+        loading,
+        errorMessage,
+        fetchPost,
+    ] = useGenericAsync(async () => {
+        const post = await api.fetchPost(username, urlSlug);
+        setPost(post);
+    }, "Error fetching post.");
+
+    useEffect(fetchPost, [username, urlSlug]);
+
+    if (loading) {
+        return <PostPagePlaceholder />
     }
-
-    fetchPost = async (username, urlSlug) => {
-        this.setState({loading: true, errorMessage: null});
-        try {
-            const post = await fetchPost(username, urlSlug);
-            this.setState({post});
-        } catch (error) {
-            console.error("Error fetching post.", error);
-            this.setState({errorMessage: error.statusText || "An error occurred."});
-        } finally {
-            this.setState({loading: false});
-        }
-    };
-
-    render() {
-        const {
-            post,
-            loading,
-            errorMessage
-        } = this.state;
-
-        if (loading) {
-            return <PostPagePlaceholder />
-        }
-        if (post == null || errorMessage) {
-            return <Message
-                error
-                header={"Couldn't load the post"}
-                content={errorMessage}
-            />
-        }
-
-        return <PostPage
-            title={post.title}
-            content={post.content}
-            datePosted={post.datePosted}
-            author={post.author}
-            urlSlug={post.urlSlug}
+    if (post == null || errorMessage) {
+        return <Message
+            error
+            header={"Couldn't load the post"}
+            content={errorMessage}
         />
     }
-}
+
+    return <PostPage
+        title={post.title}
+        content={post.content}
+        datePosted={post.datePosted}
+        author={post.author}
+        urlSlug={post.urlSlug}
+    />
+};
 
 export default withRouter(PostPageContainer);

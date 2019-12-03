@@ -9,19 +9,17 @@ import LogoutPage from "./logout/LogoutPage.jsx";
 import FrontPage from "./front-page/FrontPage.jsx";
 import RegisterPageContainer from "./register/RegisterPageContainer.jsx";
 
-class MainRoutes extends React.Component {
-    render() {
-        return <Switch>
-            <Route exact path={"/"} component={FrontPage} />
-            <Route exact path={"/@:username"} component={UserPageContainer} />
-            <Route exact path={"/@:username/:urlSlug"} component={PostPageContainer} />
-            <Route exact path={"/write-post"} component={WritePostPageContainer} />
-            <Route exact path={"/register"} component={RegisterPageContainer} />
-            <Route exact path={"/login"} component={LoginPage} />
-            <Route exact path={"/logout"} component={LogoutPage} />
-            <Route component={NotFoundPage} />
-        </Switch>
-    }
-}
+const MainRoutes = () => (
+    <Switch>
+        <Route exact path={"/"} component={FrontPage}/>
+        <Route exact path={"/@:username"} component={UserPageContainer}/>
+        <Route exact path={"/@:username/:urlSlug"} component={PostPageContainer}/>
+        <Route exact path={"/write-post"} component={WritePostPageContainer}/>
+        <Route exact path={"/register"} component={RegisterPageContainer}/>
+        <Route exact path={"/login"} component={LoginPage}/>
+        <Route exact path={"/logout"} component={LogoutPage}/>
+        <Route component={NotFoundPage}/>
+    </Switch>
+);
 
 export default MainRoutes;

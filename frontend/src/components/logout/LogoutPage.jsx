@@ -1,27 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {Loader} from "semantic-ui-react";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {setAuthTokenAction, setUserAction} from "../../redux/persist.js";
 
-class LogoutPage extends React.Component {
-    componentDidMount() {
-        this.logout();
-    }
-
-    logout = async () => {
-        const {setAuthToken, setLoggedInUser, history} = this.props;
+const LogoutPage = ({
+    setAuthToken,
+    setLoggedInUser,
+    history,
+}) => {
+    useEffect(() => {
         setAuthToken(null);
         setLoggedInUser(null);
         history.push("/");
-    };
+    }, [setAuthToken, setLoggedInUser, history]);
 
-    render() {
-        return <Loader active content={"Logger ud..."} />
-    }
-}
-
+    return <Loader active content={"Logger ud..."} />
+};
 
 LogoutPage.propTypes = {
     setLoggedInUser: PropTypes.func.isRequired,

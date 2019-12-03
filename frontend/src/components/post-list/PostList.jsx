@@ -3,19 +3,23 @@ import PropTypes from "prop-types";
 import PostListItemPlaceholder from "./PostListItemPlaceholder.jsx";
 import PostListItem from "./PostListItem.jsx";
 
-class PostList extends React.Component {
-    getPostItems = (posts, postCount, showPlaceholders) => {
+const PostList = ({
+    posts,
+    postCount,
+    showPlaceholders,
+}) => {
+    const getPostItems = (posts, postCount, showPlaceholders) => {
         posts = posts || [];
         let postItems = [];
         for (let i = 0; i < postCount; i++) {
             if (posts[i] == null) {
                 if (showPlaceholders) {
-                    postItems.push(<PostListItemPlaceholder key={`post_${i}`}/>);
+                    postItems.push(<PostListItemPlaceholder key={i}/>);
                 }
                 continue;
             }
             postItems.push(<PostListItem
-                key={`post_${i}`}
+                key={i}
                 title={posts[i].title}
                 content={posts[i].content}
                 datePosted={posts[i].datePosted}
@@ -27,23 +31,15 @@ class PostList extends React.Component {
         return postItems;
     };
 
-    render() {
-        const {
-            posts,
-            postCount,
-            showPlaceholders
-        } = this.props;
-
-        if (posts == null || posts.length === 0) {
-            return <p style={{
-                color: "grey",
-                textAlign: "center",
-            }}>No posts was found.</p>
-        }
-
-        return <div>{this.getPostItems(posts, postCount, showPlaceholders)}</div>
+    if (posts == null || posts.length === 0) {
+        return <p style={{
+            color: "grey",
+            textAlign: "center",
+        }}>No posts was found.</p>
     }
-}
+
+    return <div>{getPostItems(posts, postCount, showPlaceholders)}</div>
+};
 
 PostList.propTypes = {
     posts: PropTypes.array,

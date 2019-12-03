@@ -4,89 +4,69 @@ import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 
-class NavMenu extends React.Component {
-    getRightMenuItems = () => {
-        const {user} = this.props;
+const getAnonymousItems = () => [
+    {content: "Log in", to: "/login"},
+    {content: "Register", to: "/register"},
+];
+const getLoggedInItems = (user) => [
+    {content: "My profile", to: `/@${user.username}`},
+    {content: "Write post", to: "/write-post"},
+    {content: "Log out", to: "/logout"},
+];
+const getRightMenuItemElements = (user) => {
+    const menuItems = user ? getLoggedInItems(user) : getAnonymousItems();
+    return menuItems.map((item, i) => {
+        return <Menu.Item
+            key={i}
+            as={Link}
+            {...item}
+        />;
+    });
 
-        if (user == null) {
-            return <>
-                <Menu.Item
-                    as={Link}
-                    to={"/login"}
-                    content={"Log in"}
-                />
-                <Menu.Item
-                    as={Link}
-                    to={"/register"}
-                    content={"Register"}
-                />
-            </>
-        }
-        return <>
+};
+
+const NavMenu = ({user}) => (
+    <Menu
+        fixed={"top"}
+        borderless={true}
+    >
+        <Container>
             <Menu.Item
                 as={Link}
-                to={`/@${user.username}`}
-                content={"My profile"}
-            />
+                to={"/"}
+                header
+            >
+                <Icon
+                    name={"file alternate"}
+                    size={"big"}
+                />
+                FooBlog
+            </Menu.Item>
             <Menu.Item
                 as={Link}
-                to={"/write-post"}
-                content={"Write post"}
+                to={"/"}
+                content={"All posts"}
             />
             <Menu.Item
-                as={Link}
-                to={"/logout"}
-                content={"Log out"}
+                as={"a"}
+                href={"https://github.com/tobloef/exploring-backends"}
+                content={"GitHub"}
             />
-        </>
-     };
-
-
-    render() {
-        return <Menu
-            fixed={"top"}
-            borderless={true}
-        >
-            <Container>
-                <Menu.Item
-                    as={Link}
-                    to={"/"}
-                    header
-                >
-                    <Icon
-                        name={"file alternate"}
-                        size={"big"}
-                    />
-                    FooBlog
-                </Menu.Item>
-                <Menu.Item
-                    as={Link}
-                    to={"/"}
-                    content={"All posts"}
-                />
-                <Menu.Item
-                    as={"a"}
-                    href={"https://github.com/tobloef/exploring-backends"}
-                    content={"GitHub"}
-                />
-                <Menu.Menu
-                    position={"right"}
-                >
-                    {this.getRightMenuItems()}
-                </Menu.Menu>
-            </Container>
-        </Menu>
-    }
-}
+            <Menu.Menu
+                position={"right"}
+            >
+                {getRightMenuItemElements(user)}
+            </Menu.Menu>
+        </Container>
+    </Menu>
+);
 
 NavMenu.propTypes = {
     user: PropTypes.object
 };
 
-const stateToProps = (state) => {
-    return ({
-        user: state.persist.user,
-    });
-};
+const stateToProps = (state) => ({
+    user: state.persist.user,
+});
 
 export default connect(stateToProps)(NavMenu);
