@@ -2,7 +2,7 @@ import {store} from "./redux/store.js";
 
 let baseUrl = "http://localhost:3001";
 
-export async function fetchPosts(maxDate, limit) {
+export async function fetchPostPreviews(maxDate, limit) {
     const response = await get(`/posts`, {
         maxDate,
         limit,

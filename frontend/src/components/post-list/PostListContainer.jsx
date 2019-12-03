@@ -19,14 +19,14 @@ const PostListContainer = ({
     const [
         loadingPosts,
         errorMessage,
-        fetchPosts
+        fetchPostPreviews
     ] = useGenericAsync(async () => {
         setPostCount(postCount + POSTS_TO_LOAD);
         let newPosts;
         if (username != null) {
             newPosts = await api.fetchUserPosts(username, oldestDateLoaded, POSTS_TO_LOAD);
         } else {
-            newPosts = await api.fetchPosts(oldestDateLoaded, POSTS_TO_LOAD);
+            newPosts = await api.fetchPostPreviews(oldestDateLoaded, POSTS_TO_LOAD);
         }
         if (newPosts.length < POSTS_TO_LOAD) {
             setNoMorePosts(true);
@@ -44,7 +44,7 @@ const PostListContainer = ({
         ]);
     }, "Error fetching posts");
 
-    useEffect(fetchPosts, [username]);
+    useEffect(fetchPostPreviews, [username]);
 
     if (errorMessage != null) {
         return <Message
@@ -65,7 +65,7 @@ const PostListContainer = ({
         />
         <Button
             content={noMorePosts ? "No older posts" : "Load older posts"}
-            onClick={fetchPosts}
+            onClick={fetchPostPreviews}
             disabled={noMorePosts}
             loading={loadingPosts}
             style={{

@@ -3,7 +3,11 @@ import {db, firstOrUndefined} from "./database.js";
 export async function getPost(username, urlSlug) {
     const query = `
         SELECT
-            posts.*,
+            posts.urlSlug,
+            posts.title,
+            posts.content,
+            posts.authorId,
+            posts.datePosted,
             json_build_object(
               'id',  users.id,
               'username', users.username
@@ -21,10 +25,14 @@ export async function getPost(username, urlSlug) {
     return await firstOrUndefined(query, params);
 }
 
-export async function getPosts(username, maxDate, limit = 10) {
+export async function getPostPreviews(username, maxDate, limit = 10) {
     let query = `
         SELECT 
-            posts.*,
+            posts.urlSlug,
+            posts.title,
+            LEFT(posts.content, 1000),
+            posts.authorId,
+            posts.datePosted,
             json_build_object(
               'id',  users.id,
               'username', users.username
@@ -47,7 +55,7 @@ export async function getPosts(username, maxDate, limit = 10) {
         maxDate,
         limit
     };
-    return await db.any(query, params);
+    return db.any(query, params);
 }
 
 export async function insertPost(post) {
@@ -73,5 +81,5 @@ export async function insertPost(post) {
         authorId: post.authorId,
         datePosted: post.datePosted,
     };
-    return await db.any(query, params);
+    return db.any(query, params);
 }
