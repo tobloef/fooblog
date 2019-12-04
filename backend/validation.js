@@ -1,28 +1,32 @@
 export function validateUsername(username) {
-    if (username == null) return false;
-    if (username.length < 3) return false;
-    if (username.length > 30) return false;
-    if (!/^[a-zA-Z0-9]+$/.test(username)) return false;
-    return true;
+    return [
+        username == null,
+        username.length < 3,
+        username.length > 30,
+        !/^[a-zA-Z0-9]+$/.test(username),
+    ].every(Boolean);
 }
 
 export function validatePassword(password) {
-    if (password == null) return false;
-    if (password.length < 6) return false;
-    if (password.length > 100) return false;
-    return true;
+    return [
+        password == null,
+        password.length < 6,
+        password.length > 100,
+    ].every(Boolean);
 }
 
 export function validateTitle(title) {
-    if (title == null) return false;
-    if (title.length < 1) return false;
-    if (title.length > 100) return false;
-    return true
+    return [
+        title == null,
+        title.length < 1,
+        title.length > 100,
+    ].every(Boolean);
 }
 
 export function validateContent(content, allowEmpty) {
-    if (content == null) return false;
-    if (!allowEmpty && content.length < 1) return false;
-    if (content != null && content.length > 1000000) return false;
-    return true
+    return [
+        content == null,
+        !allowEmpty && content.length < 1,
+        content != null && content.length > 1000000,
+    ].every(Boolean);
 }
