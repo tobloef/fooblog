@@ -1,6 +1,30 @@
 import {db, firstOrUndefined} from "./database.js";
 
-export async function getPost(username, urlSlug) {
+export async function getPostById(id) {
+    const query = `
+        SELECT
+            posts."id",
+            posts."urlSlug",
+            posts."title",
+            posts."content",
+            posts."authorId",
+            posts."datePosted",
+            json_build_object(
+              'id',  users.id,
+              'username', users.username
+            ) as author
+        FROM posts
+        JOIN users ON users.id = posts."authorId"
+        WHERE
+            "id" = $(id)
+    `;
+    const params = {
+        id,
+    };
+    return await firstOrUndefined(query, params);
+}
+
+export async function getPostByUsernameUrlSlug(username, urlSlug) {
     const query = `
         SELECT
             posts."id",

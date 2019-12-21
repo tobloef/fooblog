@@ -1,4 +1,4 @@
-import {getPost} from "../../database/posts.js";
+import {getPostByUsernameUrlSlug} from "../../database/posts.js";
 import {getComment, insertComment} from "../../database/comments.js";
 import {validateContent} from "../../validation.js";
 
@@ -20,7 +20,7 @@ const handleCreateUserPostComment = async (req, res) => {
     if (!validateContent(content)) {
         return res.status(400).send("Invalid content.")
     }
-    const post = await getPost(username, urlSlug);
+    const post = await getPostByUsernameUrlSlug(username, urlSlug);
     if (post == null) {
         return res.status(400).send("Invalid post to add comment to.");
     }

@@ -1,14 +1,17 @@
+import { gql } from "apollo-server"
+
+const typeDefs = gql`
 scalar GraphQLDateTime
 
 type Query {
     posts(maxDate: GraphQLDateTime, limit: Int): [Post!]!
     post(username: String!, urlSlug: String!): Post
     user(username: String!): User
-    login(username: String!, password: String!): String
 }
 
 type Mutation {
-    createUser(username: String!, password: String!): User
+    login(username: String!, password: String!): String
+    register(username: String!, password: String!): User
     createPost(title: String!, content: String!): Post
     createComment(postId: ID!, content: String!): Comment
 }
@@ -37,3 +40,6 @@ type Comment {
     content: String!
     datePosted: GraphQLDateTime!
 }
+`;
+
+export default typeDefs;
