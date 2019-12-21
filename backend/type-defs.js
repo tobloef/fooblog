@@ -13,7 +13,7 @@ type Mutation {
     login(username: String!, password: String!): String
     register(username: String!, password: String!): User
     createPost(title: String!, content: String!): Post
-    createComment(postId: ID!, content: String!): Comment
+    createComment(username: String!, postUrlSlug: String!, content: String!): Comment
 }
 
 type User {

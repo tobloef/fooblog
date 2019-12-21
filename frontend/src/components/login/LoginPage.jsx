@@ -7,7 +7,14 @@ import useGenericAsync from "../../use-generic-async.js";
 import { decodeAuthToken } from "../../auth.js";
 import { Header } from "semantic-ui-react";
 import LoginForm from "./LoginForm.jsx";
-import * as api from "../../api.js";
+import gql from "graphql-tag";
+import { graphql } from "../../graphql/graphql.js";
+
+const LOGIN = gql`
+    mutation Login($username: String!, $password: String!) {
+        login(username: $username, password: $password)
+    }
+`;
 
 const LoginPage = ({
     setAuthToken,
@@ -23,7 +30,13 @@ const LoginPage = ({
         errorMessage,
         login
     ] = useGenericAsync(async () => {
-        const authToken = await api.login(username, password);
+        const {data: {login: authToken}} = await graphql.mutate({
+            mutation: LOGIN,
+            variables: {
+                username,
+                password
+            }
+        });
         setAuthToken(authToken);
         const payload = decodeAuthToken(authToken);
         setLoggedInUser(payload.user);

@@ -2,14 +2,45 @@ import React, { useEffect, useState } from "react";
 import PostList from "./PostList.jsx";
 import {Button, Message} from "semantic-ui-react";
 import PropTypes from "prop-types";
-import * as api from "../../api.js";
 import useGenericAsync from "../../use-generic-async.js";
+import { graphql } from "../../graphql/graphql.js";
+import gql from "graphql-tag";
 
 const POSTS_TO_LOAD = 10;
+const GET_POST_PREVIEWS = gql`
+    query GetPostPreviews($maxDate: GraphQLDateTime, $limit: Int) {
+        posts(maxDate: $maxDate, limit: $limit) {
+            title
+            content
+            datePosted
+            author {
+                username
+            }
+            urlSlug
+            commentCount
+        }
+    }
+`;
+const GET_USER_POST_PREVIEWS = gql`
+    query GetUserPostPreviews($username: String!, $maxDate: GraphQLDateTime, $limit: Int) {
+        user(username: $username) {
+            posts(maxDate: $maxDate, limit: $limit) {
+                title
+                content
+                datePosted
+                author {
+                    username
+                }
+                urlSlug
+                commentCount
+            }
+        }
+    }
+`;
 
 const PostListContainer = ({
     username,
-    loading
+    loading,
 }) => {
     const [posts, setPosts] = useState(null);
     const [postCount, setPostCount] = useState(POSTS_TO_LOAD);
@@ -24,9 +55,24 @@ const PostListContainer = ({
         setPostCount(postCount + POSTS_TO_LOAD);
         let newPosts;
         if (username != null) {
-            newPosts = await api.fetchUserPosts(username, oldestDateLoaded, POSTS_TO_LOAD);
+            const response = await graphql.mutate({
+                mutation: GET_USER_POST_PREVIEWS,
+                variables: {
+                    username,
+                    maxDate: oldestDateLoaded,
+                    limit: POSTS_TO_LOAD,
+                }
+            });
+            newPosts = response.data.user.posts;
         } else {
-            newPosts = await api.fetchPostPreviews(oldestDateLoaded, POSTS_TO_LOAD);
+            const response = await graphql.mutate({
+                mutation: GET_POST_PREVIEWS,
+                variables: {
+                    maxDate: oldestDateLoaded,
+                    limit: POSTS_TO_LOAD,
+                }
+            });
+            newPosts = response.data.posts;
         }
         if (newPosts.length < POSTS_TO_LOAD) {
             setNoMorePosts(true);

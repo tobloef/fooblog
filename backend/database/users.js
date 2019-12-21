@@ -34,10 +34,11 @@ export async function insertUser(user) {
             $(username),
             $(passwordHash)
         )
+        RETURNING id
     `;
     const params = {
         username: user.username,
         passwordHash: user.passwordHash
     };
-    return await db.none(query, params);
+    return await db.any(query, params);
 }

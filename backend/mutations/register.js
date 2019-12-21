@@ -1,5 +1,5 @@
 import { validatePassword, validateUsername } from "../validation.js";
-import { getUserByUsername, insertUser } from "../database/users.js";
+import { getUserById, getUserByUsername, insertUser } from "../database/users.js";
 import { hashPassword } from "../auth.js";
 
 const register = async (_, {username, password}) => {
@@ -19,8 +19,8 @@ const register = async (_, {username, password}) => {
         username,
         passwordHash,
     };
-    await insertUser(user);
-    return user;
+    const [{id}] = await insertUser(user);
+    return await getUserById(id);
 };
 
 export default register;

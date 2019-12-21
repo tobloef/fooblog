@@ -9,7 +9,7 @@ import createComment from "./mutations/create-comment.js";
 
 const Query = {
     posts: async (_, {maxDate, limit}) => {
-        return await getPostPreviews(maxDate, limit);
+        return await getPostPreviews(null, maxDate, limit);
     },
     post: async (_, {username, urlSlug}) => {
         return await getPost(username, urlSlug);

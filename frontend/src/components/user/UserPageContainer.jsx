@@ -3,7 +3,16 @@ import UserPage from "./UserPage.jsx";
 import {Message} from "semantic-ui-react";
 import {withRouter} from "react-router-dom";
 import useGenericAsync from "../../use-generic-async.js";
-import * as api from "../../api.js";
+import { graphql } from "../../graphql/graphql.js";
+import gql from "graphql-tag";
+
+const GET_USER = gql`
+    query GetUser($username: String!) {
+        user(username: $username) {
+            id
+        }
+    }
+`;
 
 const UserPageContainer = ({
     match,
@@ -17,7 +26,12 @@ const UserPageContainer = ({
         errorMessage,
         fetchUser,
     ] = useGenericAsync(async () => {
-        const newUser = await api.fetchUser(username);
+        const {data: {user: newUser}} = await graphql.mutate({
+            mutation: GET_USER,
+            variables: {
+                username
+            }
+        });
         setUser(newUser);
     }, "Error fetching user.");
 
@@ -33,7 +47,6 @@ const UserPageContainer = ({
 
     return <UserPage
         username={username}
-        posts={(user || {}).posts}
         loading={loading}
     />
 };

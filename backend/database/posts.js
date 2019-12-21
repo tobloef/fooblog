@@ -16,8 +16,8 @@ export async function getPost(username, urlSlug) {
         FROM posts
         JOIN users ON users.id = posts."authorId"
         WHERE
-            "urlSlug" = $(urlSlug) AND
-            "username" = $(username)
+            posts."urlSlug" = $(urlSlug) AND
+            users."username" = $(username)
     `;
     const params = {
         urlSlug,
@@ -42,7 +42,7 @@ export async function getPostById(id) {
         FROM posts
         JOIN users ON users.id = posts."authorId"
         WHERE
-            "id" = $(id)
+            posts."id" = $(id)
     `;
     const params = {
         id,
@@ -99,7 +99,8 @@ export async function insertPost(post) {
             $(content),
             $(authorId),
             $(datePosted)
-        )
+        ) 
+        RETURNING id
     `;
     const params = {
         urlSlug: post.urlSlug,

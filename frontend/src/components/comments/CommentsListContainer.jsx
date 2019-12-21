@@ -5,7 +5,34 @@ import CommentsList from "./CommentsList.jsx";
 import CommentForm from "./CommentForm.jsx";
 import { connect } from "react-redux";
 import useGenericAsync from "../../use-generic-async.js";
-import * as api from "../../api.js";
+import gql from "graphql-tag";
+import { graphql } from "../../graphql/graphql.js";
+
+const CREATE_COMMENT = gql`
+    mutation CreateComment($username: String!, $postUrlSlug: String!, $content: String!) {
+        createComment(username: $username, postUrlSlug: $postUrlSlug, content: $content) {
+            author {
+                username
+            }
+            content
+            datePosted
+        }
+    }
+`;
+
+const GET_POST_COMMENTS = gql`
+    query GetPostComments($username: String!, $urlSlug: String!) {
+        post(username: $username, urlSlug: $urlSlug) {
+            comments {
+                content
+                author {
+                    username
+                }
+                datePosted
+            }
+        }
+    }
+`;
 
 const CommentsListContainer = ({
    authorUsername,
@@ -18,8 +45,15 @@ const CommentsListContainer = ({
         submitCommentLoading,
         submitCommentErrorMessage,
         submitComment
-    ] = useGenericAsync(async (commentContent) => {
-        const comment = await api.createComment(authorUsername, postUrlSlug, commentContent);
+    ] = useGenericAsync(async (content) => {
+        const {data: {createComment: comment}} = await graphql.mutate({
+            mutation: CREATE_COMMENT,
+            variables: {
+                username: authorUsername,
+                postUrlSlug,
+                content,
+            }
+        });
         setComments([comment, ...comments]);
     }, "Error submitting comment.");
 
@@ -28,7 +62,14 @@ const CommentsListContainer = ({
         fetchCommentsErrorMessage,
         fetchComments
     ] = useGenericAsync(async () => {
-        const comments = await api.fetchPostComments(authorUsername, postUrlSlug);
+
+        const {data: {post: {comments}}} = await graphql.mutate({
+            mutation: GET_POST_COMMENTS,
+            variables: {
+                username: authorUsername,
+                urlSlug: postUrlSlug,
+            }
+        });
         if (comments == null) {
             throw new Error("Fetched comments are null.");
         }

@@ -5,7 +5,16 @@ import {withRouter} from "react-router-dom";
 import {Header} from "semantic-ui-react";
 import {connect} from "react-redux";
 import useGenericAsync from "../../use-generic-async.js";
-import * as api from "../../api.js";
+import { graphql } from "../../graphql/graphql.js";
+import gql from "graphql-tag";
+
+const REGISTER = gql`
+    mutation Register($username: String!, $password: String!) {
+        register(username: $username, password: $password) {
+            id
+        }
+    }
+`;
 
 const RegisterPageContainer = ({
     user,
@@ -26,7 +35,13 @@ const RegisterPageContainer = ({
             error.errorMessage = "Passwords doesn't match.";
             throw error;
         }
-        await api.registerUser(username, password);
+        await graphql.mutate({
+            mutation: REGISTER,
+            variables: {
+                username,
+                password
+            }
+        });
         setRegistrationCompleted(true);
         setUsername("");
         setPassword("");
@@ -54,9 +69,9 @@ const RegisterPageContainer = ({
             username={username}
             password={password}
             confirmPassword={confirmPassword}
-            onChangeUsername={(value) => this.setState({username: value})}
-            onChangePassword={(value) => this.setState({password: value})}
-            onChangeConfirmPassword={(value) => this.setState({confirmPassword: value})}
+            onChangeUsername={setUsername}
+            onChangePassword={setPassword}
+            onChangeConfirmPassword={setConfirmPassword}
         />
     </>
 };

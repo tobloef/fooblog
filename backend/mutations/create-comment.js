@@ -1,15 +1,15 @@
 import { validateContent } from "../validation.js";
-import { getPostById } from "../database/posts.js";
+import { getPost, getPostById } from "../database/posts.js";
 import { getComment, insertComment } from "../database/comments.js";
 
-const createComment = async (_, {postId, content}, {user}) => {
+const createComment = async (_, {username, postUrlSlug, content}, {user}) => {
     if (user == null) {
         throw new Error("User not logged in.");
     }
     if (!validateContent(content)) {
         throw new Error("Invalid content.")
     }
-    const post = await getPostById(postId);
+    const post = await getPost(username, postUrlSlug);
     if (post == null) {
         throw new Error("Invalid post to add comment to.");
     }

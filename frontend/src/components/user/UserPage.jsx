@@ -1,11 +1,10 @@
 import React from "react";
 import { Header } from "semantic-ui-react";
-import PostListContainer from "../post-list/PostListContainer.jsx";
+import UserPostListContainer from "../post-list/PostListContainer.jsx";
 import PropTypes from "prop-types";
 
 const UserPage = ({
     username,
-    posts,
     loading,
 }) => {
     return <div style={{
@@ -13,9 +12,8 @@ const UserPage = ({
         flexDirection: "column",
     }}>
         <Header content={`Posts by @${username}`} />
-        <PostListContainer
+        <UserPostListContainer
             username={username}
-            posts={posts}
             loading={loading}
         />
     </div>
@@ -23,7 +21,6 @@ const UserPage = ({
 
 UserPage.propTypes = {
     username: PropTypes.string.isRequired,
-    posts: PropTypes.array,
     loading: PropTypes.bool,
 };
 
