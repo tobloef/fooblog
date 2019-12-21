@@ -1,24 +1,25 @@
+import { ApolloServer } from "apollo-server";
 import dotenv from "dotenv";
-import setupApp from "./app.js";
 import * as database from "./database/database.js";
+import resolvers from "./resolvers.js";
+import context from "./contexts/context.js";
+import typeDefs from "./type-defs.js";
 
-/**
- * SetupScreen the environment, then start the express server
- * @returns {Promise<void>}
- */
-async function start() {
-    try {
-        dotenv.config();
-        const port = Number(process.env.PORT);
-        if (Number.isNaN(port)) {
-            throw new Error(`Invalid port ${process.env.PORT}.`);
-        }
-        await database.connect();
-        const app = await setupApp();
-        app.listen(port, () => console.info(`Started server on port ${port}.`));
-    } catch (error) {
-        console.error("Error starting server.", error);
-    }
-}
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context,
+});
 
-start();
+const main = async () => {
+    dotenv.config();
+    await database.connect();
+    await server.listen({
+        tracing: true,
+        port: 4000,
+        path: "/"
+    });
+    console.info("Started GraphQL server on port 4000");
+};
+
+main();

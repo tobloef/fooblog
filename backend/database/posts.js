@@ -1,4 +1,4 @@
-import {db, firstOrUndefined} from "./database.js";
+import {firstOrUndefined, db} from "./database.js";
 
 export async function getPost(username, urlSlug) {
     const query = `
@@ -26,13 +26,38 @@ export async function getPost(username, urlSlug) {
     return await firstOrUndefined(query, params);
 }
 
+export async function getPostById(id) {
+    const query = `
+        SELECT
+            posts."id",
+            posts."urlSlug",
+            posts."title",
+            posts."content",
+            posts."authorId",
+            posts."datePosted",
+            json_build_object(
+              'id',  users.id,
+              'username', users.username
+            ) as author
+        FROM posts
+        JOIN users ON users.id = posts."authorId"
+        WHERE
+            "id" = $(id)
+    `;
+    const params = {
+        id,
+    };
+    return await firstOrUndefined(query, params);
+}
+
 export async function getPostPreviews(username, maxDate, limit = 10) {
     let query = `
         SELECT 
             posts."id",
             posts."urlSlug",
             posts."title",
-            LEFT(posts."content", 1000) as content,
+            LEFT(posts."content", 1000) as "preview",
+            posts."content",
             posts."authorId",
             posts."datePosted",
             json_build_object(
